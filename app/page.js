@@ -78,7 +78,7 @@ export default function Home() {
       school: "Birla Institute of Technology and Science, Pilani",
       degree: "BSc, Computer Science",
       duration: "Jul 2023 - Jul 2027",
-      image: "/bits.png",
+      image: "/Bits.png",
       current: true
     },
     {
