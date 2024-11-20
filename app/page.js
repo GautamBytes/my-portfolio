@@ -121,7 +121,7 @@ export default function Home() {
     },
     {
       title: 'Talaash AI',
-      description: 'Talaash AI is an innovative, AI-powered education platform designed to enhance learning experiences for students preparing for competitive exams. With features like Topper\'s Evaluation, Quiz Generation, Mindmap Creation, and a Career Hub, Talaash AI is your personal education sidekick, providing tailored support for academic success.',
+      description: 'Talaash AI is an innovative, AI-powered education platform designed to enhance learning experiences for students preparing for competitive exams. With features like Topper&apos;s Evaluation, Quiz Generation, Mindmap Creation, and a Career Hub, Talaash AI is your personal education sidekick, providing tailored support for academic success.',
       technologies: ['AI', 'Education Technology', 'Web Development'],
       github: 'https://github.com/GautamBytes/hackathon-projects',
       demo: 'https://drive.google.com/file/d/1E8Ry9QkDpJaiFhAA12sajxPzSJO5i8JA/view?usp=sharing'
@@ -232,7 +232,7 @@ export default function Home() {
             className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-sm w-full"
           >
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">You're Amazing!</h3>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">You&apos;re Amazing!</h3>
               <button
                 onClick={() => setIsBoredModalOpen(false)}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
@@ -241,7 +241,7 @@ export default function Home() {
               </button>
             </div>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
-              Wow! You've made it this far on my website. Your curiosity and interest are truly appreciated. You're not just a visitor; you're an explorer of digital realms!
+              Wow! You&apos;ve made it this far on my website. Your curiosity and interest are truly appreciated. You&apos;re not just a visitor; you&apos;re an explorer of digital realms!
             </p>
             <div className="flex justify-center">
               <motion.div
@@ -332,10 +332,10 @@ export default function Home() {
               <div className="flex-1 px-6 lg:px-0">
                 <h2 className="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">About Me</h2>
                 <p className="text-xl mb-4 text-gray-700 dark:text-gray-300">
-                  PM intern @BuildFastwithAI | Hacktoberfest'24 | WOB'24 | Runner-Up(ICCRIP 2024) | 3rd@(IITD Tryst) | CS@BITS PILANI
+                  PM intern @BuildFastwithAI | Hacktoberfest&apos;24 | WOB&apos;24 | Runner-Up(ICCRIP 2024) | 3rd@(IITD Tryst) | CS@BITS PILANI
                 </p>
                 <p className="text-lg mb-8 text-gray-600 dark:text-gray-200">
-                  Hi, I'm Gautam Manchandani, a second-year Computer Science student at BITS Pilani with a passion for AI/ML innovation and open-source contributions. Currently serving as a Product Manager Intern at Build Fast with AI, where I'm gaining hands-on experience in AI product development and management. I recently participated in Hacktoberfest 2024, successfully contributing 23 PRs with 10 merged, demonstrating my commitment to collaborative development and code quality.
+                  Hi, I&apos;m Gautam Manchandani, a second-year Computer Science student at BITS Pilani with a passion for AI/ML innovation and open-source contributions. Currently serving as a Product Manager Intern at Build Fast with AI, where I&apos;m gaining hands-on experience in AI product development and management. I recently participated in Hacktoberfest 2024, successfully contributing 23 PRs with 10 merged, demonstrating my commitment to collaborative development and code quality.
                 </p>
                 <motion.a
                   href="/resume.pdf"
