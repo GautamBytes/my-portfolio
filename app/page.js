@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { Sun, Moon, Download, Github, ExternalLink, Briefcase, Calendar, Award, Star, Send, Linkedin, Twitter, ArrowUp, ChevronDown, ChevronUp, Building, X } from 'lucide-react'
+import { Bell, Check, Play, Youtube } from 'lucide-react'
+
 
 export default function Home() {
   const [theme, setTheme] = useState('light')
@@ -204,7 +206,7 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const navItems = ['About', 'Education', 'Projects', 'Experience', 'Skills', 'Achievements', 'Contact', 'Bored?']
+  const navItems = ['About', 'Education', 'Projects', 'Experience', 'Skills', 'Achievements', 'Youtube','Contact', 'Bored?']
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -640,6 +642,97 @@ export default function Home() {
                 </motion.div>
               ))}
             </div>
+          </motion.section>
+
+          {/* YouTube Section */}
+          <motion.section
+            id="youtube"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="py-20 max-w-6xl mx-auto"
+          >
+            <h2 className="text-3xl font-bold mb-8 text-center">YouTube Channel</h2>
+            <motion.div
+              className="bg-gradient-to-r from-blue-400 to-purple-400 p-1 rounded-2xl shadow-lg"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-8">
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                  <div className="relative aspect-video w-full overflow-hidden rounded-xl">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-400/20 z-10" />
+                    <Image
+                      src="/Youtube_img.jpg"
+                      alt="YouTube Channel Coming Soon"
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-xl"
+                    />
+                    <motion.div
+                      className="absolute inset-0 flex items-center justify-center z-20"
+                      whileHover={{ scale: 1.1 }}
+                    >
+                      <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg">
+                        <Play size={32} className="text-white ml-1" />
+                      </div>
+                    </motion.div>
+                  </div>
+                  <div className="space-y-6">
+                    <div className="space-y-4">
+                      <h3 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
+                        Exciting Content Coming Soon!
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 text-lg">
+                        Get ready for an amazing journey into the world of technology! Subscribe now and be the first to experience:
+                      </p>
+                      <ul className="space-y-3">
+                        <li className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
+                          <span className="w-6 h-6 rounded-full bg-green-400/20 flex items-center justify-center">
+                            <Check className="w-4 h-4 text-green-500" />
+                          </span>
+                          <span>AI/ML Project Tutorials</span>
+                        </li>
+                        <li className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
+                          <span className="w-6 h-6 rounded-full bg-green-400/20 flex items-center justify-center">
+                            <Check className="w-4 h-4 text-green-500" />
+                          </span>
+                          <span>Web Development Tips & Tricks</span>
+                        </li>
+                        <li className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
+                          <span className="w-6 h-6 rounded-full bg-green-400/20 flex items-center justify-center">
+                            <Check className="w-4 h-4 text-green-500" />
+                          </span>
+                          <span>Tech Industry Insights</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <motion.a
+                        href="https://www.youtube.com/@GRM-0925"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center px-6 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors duration-300 text-lg font-medium shadow-lg hover:shadow-xl"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Youtube size={24} className="mr-2" />
+                        Subscribe Now
+                      </motion.a>
+                      <motion.button
+                        className="inline-flex items-center justify-center px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 text-lg font-medium"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Bell size={24} className="mr-2" />
+                        Get Notified
+                      </motion.button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </motion.section>
 
           {/* Contact Section */}
