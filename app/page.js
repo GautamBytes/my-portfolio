@@ -6,7 +6,6 @@ import Image from 'next/image'
 import { Sun, Moon, Download, Github, ExternalLink, Briefcase, Calendar, Award, Star, Send, Linkedin, Twitter, ArrowUp, ChevronDown, ChevronUp, Building, X } from 'lucide-react'
 import { Bell, Check, Play, Youtube } from 'lucide-react'
 
-
 export default function Home() {
   const [theme, setTheme] = useState('light')
   const [isScrolled, setIsScrolled] = useState(false)
@@ -15,7 +14,7 @@ export default function Home() {
   const [isBoredModalOpen, setIsBoredModalOpen] = useState(false)
   const [skills] = useState({
     technical: [
-      { 
+      {
         category: 'PROGRAMMING',
         items: [
           { name: 'C', level: 4 },
@@ -98,35 +97,56 @@ export default function Home() {
       description: 'An AI-powered medical chatbot providing users with personalized healthcare support across 16 specializations, with features like symptom checking, medication reminders, expert consultations, and emergency assist. The chatbot supports multilingual communication and voice input for accessibility.',
       technologies: ['AI', 'NLP', 'Healthcare'],
       github: 'https://github.com/GautamBytes/Medecro_AI_PERSONALIZED_PLATFORM',
-      demo: 'https://drive.google.com/file/d/15yS1u18rkn8H9NPCrLcZeqOBAeHDz8dE/view?usp=drive_link'
+      demo: 'https://drive.google.com/file/d/15yS1u18rkn8H9NPCrLcZeqOBAeHDz8dE/view?usp=drive_link',
+      demoType: 'Demo Video'
     },
     {
       title: 'Vehicle Detection System',
       description: 'An advanced machine learning application for real-time vehicle detection and classification, utilizing YOLO algorithm for accurate and efficient results.',
       technologies: ['Machine Learning', 'YOLO', 'Computer Vision'],
       github: 'https://github.com/GautamBytes/Jadavpur_Hackathon',
-      demo: 'https://drive.google.com/file/d/1C23wweeOFtJIo_OV5zEpsUBD97LbbqFR/view?usp=drive_link'
+      demo: 'https://drive.google.com/file/d/1C23wweeOFtJIo_OV5zEpsUBD97LbbqFR/view?usp=drive_link',
+      demoType: 'Demo Video'
     },
     {
       title: 'Contract Risk Assessor',
       description: 'This tool, developed as part of the Contract Risk Assessment Hackathon, focuses on using Natural Language Processing (NLP) to analyze and extract key clauses from construction contract documents. The tool answers specific queries about contract details, providing concise summaries and insights.',
       technologies: ['NLP', 'Document Analysis', 'AI'],
       github: 'https://github.com/GautamBytes/IITM_HACKATHON',
-      demo: 'https://drive.google.com/file/d/1rRiQIALYMmYL_LEgHB3CQqIyvoUcJl34/view?usp=drive_link'
+      demo: 'https://drive.google.com/file/d/1rRiQIALYMmYL_LEgHB3CQqIyvoUcJl34/view?usp=drive_link',
+      demoType: 'Demo Video'
     },
     {
       title: 'Gesture Recognition App',
       description: 'The Gesture Detection Web-Based App is an innovative application that captures and interprets math gestures drawn in the air, using the Gemini API. This tool is designed to facilitate interactive learning and provide instant feedback on math-related queries by recognizing gestures and converting them into meaningful responses.',
       technologies: ['Gesture Recognition', 'Gemini API', 'Web Development'],
       github: 'https://github.com/GautamBytes/Math_Gesture_Prediction_tool',
-      demo: 'https://drive.google.com/file/d/1LZo4HjSHS20_3LVZmHC1KrBdcWM2SKYj/view?usp=sharing'
+      demo: 'https://drive.google.com/file/d/1LZo4HjSHS20_3LVZmHC1KrBdcWM2SKYj/view?usp=sharing',
+      demoType: 'Demo Video'
     },
     {
       title: 'Talaash AI',
       description: 'Talaash AI is an innovative, AI-powered education platform designed to enhance learning experiences for students preparing for competitive exams. With features like Topper&apos;s Evaluation, Quiz Generation, Mindmap Creation, and a Career Hub, Talaash AI is your personal education sidekick, providing tailored support for academic success.',
       technologies: ['AI', 'Education Technology', 'Web Development'],
       github: 'https://github.com/GautamBytes/hackathon-projects',
-      demo: 'https://drive.google.com/file/d/1E8Ry9QkDpJaiFhAA12sajxPzSJO5i8JA/view?usp=sharing'
+      demo: 'https://drive.google.com/file/d/1E8Ry9QkDpJaiFhAA12sajxPzSJO5i8JA/view?usp=sharing',
+      demoType: 'Demo Video'
+    },
+    {
+      title: 'TimeCapsule Smart Contract',
+      description: 'A Solidity smart contract that enables users to create time-locked messages on the Ethereum blockchain. Perfect for storing messages that can only be retrieved after a specified time period has elapsed. Features include creating time-locked messages, retrieving messages after the lock period, and viewing capsule details.',
+      technologies: ['Solidity', 'Ethereum', 'Smart Contracts'],
+      github: 'https://github.com/GautamBytes/Bitcoin-Themed-Time-Capsule',
+      demo: 'https://github.com/GautamBytes/Bitcoin-Themed-Time-Capsule',
+      demoType: 'Live Demo'
+    },
+    {
+      title: 'Bitcoin Timestamp Verifier',
+      description: 'A web application designed for users to verify the existence of files on the Bitcoin blockchain. This tool utilizes the Blockstream API to facilitate the verification process, ensuring users can check if specific documents or data hashes are recorded on the blockchain. Features include file upload, blockchain verification, and user feedback.',
+      technologies: ['React.js', 'Blockstream API', 'Web Development'],
+      github: 'https://github.com/GautamBytes/Bitcoin-Timestamp-Verifier',
+      demo: 'https://bitcoin-timestamp-verifier.vercel.app/',
+      demoType: 'Live Demo'
     }
   ]
 
@@ -455,7 +475,7 @@ export default function Home() {
                         whileHover={{ scale: 1.05 }}
                       >
                         <ExternalLink size={20} className="mr-1" />
-                        Demo Video
+                        {project.demoType}
                       </motion.a>
                     </div>
                   </div>
@@ -870,3 +890,4 @@ export default function Home() {
     </div>
   )
 }
+
