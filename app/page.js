@@ -406,7 +406,7 @@ export default function Home() {
                   Intern @Shopstr | Bitshala Dev Fellow | SOB&apos;25 | Former PM intern @BuildFastwithAI | 2nd@(ICCRIP 2024) | 3rd@(IITD Tryst) | CS@BITS PILANI
                 </p>
                 <p className="text-lg mb-8 text-neutral-400">
-                  Hi, I&apos;m Gautam Manchandani, a third-year Computer Science student at BITS Pilani with a deep passion for open-source development and the Bitcoin ecosystem. I am currently honing my skills as an Open Source Bitcoin Engineer Intern at Shopstr and contributing to impactful projects as a Bitshala Dev Fellow. My journey includes a successful Summer of Bitcoin '25 mentorship and a background in AI/ML, highlighted by my contributions during Hacktoberfest '24. I am dedicated to building secure, decentralized financial solutions.
+                  Hi, I&apos;m Gautam Manchandani, a third-year Computer Science student at BITS Pilani with a deep passion for open-source development and the Bitcoin ecosystem. I am currently honing my skills as an Open Source Bitcoin Engineer Intern at Shopstr and contributing to impactful projects as a Bitshala Dev Fellow. My journey includes a successful Summer of Bitcoin &apos;25 mentorship and a background in AI/ML, highlighted by my contributions during Hacktoberfest &apos;24. I am dedicated to building secure, decentralized financial solutions.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <motion.a
