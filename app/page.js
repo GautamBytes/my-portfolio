@@ -11,7 +11,7 @@ export default function Home() {
   const [showAllProjects, setShowAllProjects] = useState(false)
   const [messageSent, setMessageSent] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isBoredModalOpen, setIsBoredModalOpen] = useState(false)
+  const [selectedGear, setSelectedGear] = useState(null) 
 
   const [skills] = useState({
     technical: [
@@ -219,6 +219,49 @@ export default function Home() {
     }
   ];
 
+  const gears = [
+    {
+      name: 'HP 15s Laptop',
+      description: 'Core i3 11th Gen, 8GB RAM, 512GB SSD',
+      image: '/laptop.png' 
+    },
+    {
+      name: 'AULA F75 Mechanical Keyboard',
+      description: '75% Wireless, Graywood Linear Switches',
+      image: '/Keyboard.png' 
+    },
+    {
+      name: 'Logitech M235 Wireless Mouse',
+      description: '1000 DPI Optical Tracking',
+      image: '/mouse.png' 
+    },
+    {
+      name: 'Wakefit Gravita Pro Chair',
+      description: 'Highback Ergonomic Office Chair',
+      image: '/chair.png' 
+    },
+    {
+      name: 'Noise Buds N1 Pro',
+      description: 'Wireless Earbuds with ANC',
+      image: '/ear_buds.png' 
+    },
+    {
+      name: 'Portronics My Buddy K',
+      description: 'Portable Laptop Stand',
+      image: '/laptop_stand.png' 
+    },
+    {
+      name: 'LG 27UP850-W Monitor',
+      description: '27" UHD (3840x2160) IPS Display',
+      image: '/monitor.png'
+    },
+    {
+      name: 'Baseus Monitor Lightbar',
+      description: 'USB Powered LED with Touch Sensor',
+      image: '/lightbar.png'
+    }
+  ]
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
@@ -240,7 +283,7 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const navItems = ['Education', 'Projects', 'Experience', 'Achievements', 'github', 'Contact', 'Bored?']
+  const navItems = ['Education', 'Projects', 'Experience', 'Achievements', 'github', 'Gears', 'Contact']
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -250,58 +293,44 @@ export default function Home() {
     }, 1000)
   }
 
-  const BoredModal = () => (
+  const GearModal = () => (
     <AnimatePresence>
-      {isBoredModalOpen && (
+      {selectedGear && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={() => setIsBoredModalOpen(false)}
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedGear(null)} 
+          className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4 backdrop-blur-sm cursor-pointer"
         >
           <motion.div
-            initial={{ scale: 0.8, rotate: -10 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0.8, rotate: 10 }}
-            onClick={(e) => e.stopPropagation()}
-            className="bg-neutral-900 border border-neutral-700 p-6 rounded-lg shadow-xl max-w-sm w-full"
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.5, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            onClick={(e) => e.stopPropagation()} 
+            className="relative w-full max-w-2xl h-auto max-h-[80vh] cursor-default" 
           >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-2xl font-bold text-white">You&apos;re Amazing!</h3>
-              <button
-                onClick={() => setIsBoredModalOpen(false)}
-                className="text-gray-400 hover:text-gray-300 transition-colors"
-              >
-                <X size={24} />
-              </button>
-            </div>
-            <p className="text-gray-300 mb-4">
-              Wow! You&apos;ve made it this far on my website. Your curiosity and interest are truly appreciated. You&apos;re not just a visitor; you&apos;re an explorer of digital realms!
-            </p>
-            <div className="flex justify-center">
-              <motion.div
-                animate={{
-                  scale: [1, 1.2, 1],
-                  rotate: [0, 10, -10, 0],
-                }}
-                transition={{
-                  duration: 0.5,
-                  ease: "easeInOut",
-                  times: [0, 0.2, 0.5, 0.8, 1],
-                  repeat: Infinity,
-                  repeatDelay: 1
-                }}
-              >
-                <span className="text-4xl">✨</span>
-              </motion.div>
-            </div>
+            <Image
+              src={selectedGear.image}
+              alt={selectedGear.name}
+              width={1920} 
+              height={1080} 
+              className="w-full h-auto object-contain rounded-lg"
+            />
+            <button
+              onClick={() => setSelectedGear(null)}
+              className="absolute -top-4 -right-4 bg-neutral-800 text-white rounded-full p-2 hover:bg-neutral-700 transition-colors"
+              aria-label="Close image"
+            >
+              <X size={24} />
+            </button>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
   )
-
+  
   return (
     <div className="min-h-screen text-white transition-colors duration-300">
 
@@ -319,8 +348,8 @@ export default function Home() {
             {navItems.map((item, index) => (
               <motion.a
                 key={item}
-                href={item === 'Bored?' ? '#' : `#${item.toLowerCase()}`}
-                onClick={item === 'Bored?' ? () => setIsBoredModalOpen(true) : undefined}
+                href={`#${item.toLowerCase()}`}
+                onClick={undefined} 
                 className="nav-button-custom"
                 initial={{ opacity: 0, y: -20}}
                 animate={{opacity: 1, y: 0}}
@@ -357,13 +386,10 @@ export default function Home() {
               {navItems.map((item) => (
                 <a
                   key={item}
-                  href={item === 'Bored?' ? '#' : `#${item.toLowerCase()}`}
+                  href={`#${item.toLowerCase()}`}
                   className="text-3xl font-medium text-neutral-300 hover:text-white transition-colors"
                   onClick={() => {
-                    setIsMenuOpen(false); // Close menu on any link click
-                    if (item === 'Bored?') {
-                      setIsBoredModalOpen(true);
-                    }
+                    setIsMenuOpen(false); 
                   }}
                 >
                   {item}
@@ -443,7 +469,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto"
+            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">Education</h2>
             <div className="space-y-8">
@@ -497,7 +523,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto"
+            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">Projects</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -579,7 +605,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto"
+            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">Experience</h2>
             <div className="space-y-8">
@@ -633,7 +659,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto"
+            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">Skills</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -695,7 +721,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto"
+            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">Achievements</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -734,7 +760,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto"
+            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">GitHub Contributions</h2>
             <motion.div
@@ -762,7 +788,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto"
+            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">YouTube Channel</h2>
             <motion.div
@@ -770,77 +796,116 @@ export default function Home() {
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
-                <div className="grid md:grid-cols-2 gap-8 items-center">
-                  <div className="relative aspect-video w-full overflow-hidden rounded-xl">
-                    <Image
-                      src="/Youtube_img.jpg"
-                      alt="YouTube Channel Coming Soon"
-                      fill
-                      className="rounded-xl object-cover"
-                    />
-                    <motion.div
-                      className="absolute inset-0 flex items-center justify-center z-20"
-                      whileHover={{ scale: 1.1 }}
-                    >
-                      <div className="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center shadow-lg">
-                        <Play size={32} className="text-white ml-1" />
-                      </div>
-                    </motion.div>
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div className="relative aspect-video w-full overflow-hidden rounded-xl">
+                  <Image
+                    src="/Youtube_img.jpg"
+                    alt="YouTube Channel Coming Soon"
+                    fill
+                    className="rounded-xl object-cover"
+                  />
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center z-20"
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <div className="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center shadow-lg">
+                      <Play size={32} className="text-white ml-1" />
+                    </div>
+                  </motion.div>
+                </div>
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <h3 className="text-3xl font-bold text-gray-100">
+                      Exciting Content Coming Soon!
+                    </h3>
+                    <p className="text-gray-300 text-lg">
+                      Get ready for an amazing journey into the world of technology! Subscribe now and be the first to experience:
+                    </p>
+                    <ul className="space-y-3">
+                      <li className="flex items-center space-x-2 text-gray-300">
+                        <span className="w-6 h-6 rounded-full bg-green-400/20 flex items-center justify-center">
+                          <Check className="w-4 h-4 text-green-500" />
+                        </span>
+                        <span>AI/ML Project Tutorials</span>
+                      </li>
+                      <li className="flex items-center space-x-2 text-gray-300">
+                        <span className="w-6 h-6 rounded-full bg-green-400/20 flex items-center justify-center">
+                          <Check className="w-4 h-4 text-green-500" />
+                        </span>
+                        <span>Web Development Tips & Tricks</span>
+                      </li>
+                      <li className="flex items-center space-x-2 text-gray-300">
+                        <span className="w-6 h-6 rounded-full bg-green-400/20 flex items-center justify-center">
+                          <Check className="w-4 h-4 text-green-500" />
+                        </span>
+                        <span>Tech Industry Insights</span>
+                      </li>
+                    </ul>
                   </div>
-                  <div className="space-y-6">
-                    <div className="space-y-4">
-                      <h3 className="text-3xl font-bold text-gray-100">
-                        Exciting Content Coming Soon!
-                      </h3>
-                      <p className="text-gray-300 text-lg">
-                        Get ready for an amazing journey into the world of technology! Subscribe now and be the first to experience:
-                      </p>
-                      <ul className="space-y-3">
-                        <li className="flex items-center space-x-2 text-gray-300">
-                          <span className="w-6 h-6 rounded-full bg-green-400/20 flex items-center justify-center">
-                            <Check className="w-4 h-4 text-green-500" />
-                          </span>
-                          <span>AI/ML Project Tutorials</span>
-                        </li>
-                        <li className="flex items-center space-x-2 text-gray-300">
-                          <span className="w-6 h-6 rounded-full bg-green-400/20 flex items-center justify-center">
-                            <Check className="w-4 h-4 text-green-500" />
-                          </span>
-                          <span>Web Development Tips & Tricks</span>
-                        </li>
-                        <li className="flex items-center space-x-2 text-gray-300">
-                          <span className="w-6 h-6 rounded-full bg-green-400/20 flex items-center justify-center">
-                            <Check className="w-4 h-4 text-green-500" />
-                          </span>
-                          <span>Tech Industry Insights</span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <motion.a
-                        href="https://www.youtube.com/@GRM-0925"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center px-6 py-3 bg-neutral-900 border border-neutral-700 text-white rounded-xl hover:bg-neutral-800 transition-colors duration-300 text-lg font-medium shadow-lg"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <Youtube size={24} className="mr-2" />
-                        Subscribe Now
-                      </motion.a>
-                      <motion.button
-                        className="inline-flex items-center justify-center px-6 py-3 bg-neutral-800 text-gray-200 rounded-xl hover:bg-neutral-700 transition-colors duration-300 text-lg font-medium"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <Bell size={24} className="mr-2" />
-                        Get Notified
-                      </motion.button>
-                    </div>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <motion.a
+                      href="https://www.youtube.com/@GRM-0925"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center px-6 py-3 bg-neutral-900 border border-neutral-700 text-white rounded-xl hover:bg-neutral-800 transition-colors duration-300 text-lg font-medium shadow-lg"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Youtube size={24} className="mr-2" />
+                      Subscribe Now
+                    </motion.a>
+                    <motion.button
+                      className="inline-flex items-center justify-center px-6 py-3 bg-neutral-800 text-gray-200 rounded-xl hover:bg-neutral-700 transition-colors duration-300 text-lg font-medium"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Bell size={24} className="mr-2" />
+                      Get Notified
+                    </motion.button>
                   </div>
                 </div>
+              </div>
             </motion.div>
           </motion.section>
+
+          {/* Gears Section */}
+          <motion.section
+            id="gears"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
+          >
+            <h2 className="text-3xl font-bold mb-8 text-center">My Gears</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {gears.map((item, index) => (
+                <motion.div
+                  key={item.name}
+                  className="bg-dark-800 rounded-lg shadow-md overflow-hidden surface cursor-pointer"
+                  onClick={() => setSelectedGear(item)} 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.03 }}
+                >
+                  <div className="relative w-full aspect-video bg-neutral-900 border-b border-neutral-700">
+                    <Image
+                      src={item.image} 
+                      alt={item.name}
+                      fill
+                      className="object-contain p-4" 
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-2">{item.name}</h3>
+                    <p className="text-gray-300">{item.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.section>
+
 
           {/* Contact Section */}
           <motion.section
@@ -986,8 +1051,8 @@ export default function Home() {
           </motion.button>
         </div>
       </footer>
-      <BoredModal />
+      
+      <GearModal />
     </div>
   )
 }
- 
