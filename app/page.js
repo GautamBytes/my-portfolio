@@ -251,8 +251,8 @@ export default function Home() {
       image: '/laptop_stand.png' 
     },
     {
-      name: 'LG 27UP850-W Monitor',
-      description: '27" UHD (3840x2160) IPS Display',
+      name: 'Dell S2725QC Monitor',
+      description: '27-inch 4K IPS, 120Hz, 65W USB-C PD',
       image: '/monitor.png'
     },
     {
