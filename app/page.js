@@ -1,10 +1,10 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react' // Added useRef
 import { motion, AnimatePresence } from 'framer-motion';
 import GitHubCalendar from 'react-github-calendar';
 import Image from 'next/image'
-import { Sun, Moon, Download, Github, ExternalLink, Briefcase, Calendar, Award, Star, Send, Linkedin, Twitter, ArrowUp, ChevronDown, ChevronUp, Building, X, Menu } from 'lucide-react'
-import { Bell, Check, Play, Youtube } from 'lucide-react'
+// Added Volume2 and VolumeX to imports
+import { Sun, Moon, Download, Github, ExternalLink, Briefcase, Calendar, Award, Star, Send, Linkedin, Twitter, ArrowUp, ChevronDown, ChevronUp, Building, X, Menu, Bell, Check, Play, Youtube, Volume2, VolumeX } from 'lucide-react'
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -12,6 +12,31 @@ export default function Home() {
   const [messageSent, setMessageSent] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [selectedGear, setSelectedGear] = useState(null) 
+
+  // --- AUDIO STATE ---
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [showIntro, setShowIntro] = useState(true) // Controls the "Enter" screen
+  const audioRef = useRef(null)
+
+  const handleEnterSite = () => {
+    setShowIntro(false)
+    setIsPlaying(true)
+    if (audioRef.current) {
+      audioRef.current.volume = 0.5 // Set volume to 50%
+      audioRef.current.play().catch(error => console.log("Playback failed", error))
+    }
+  }
+
+  const toggleAudio = () => {
+    if (isPlaying) {
+      audioRef.current.pause()
+      setIsPlaying(false)
+    } else {
+      audioRef.current.play()
+      setIsPlaying(true)
+    }
+  }
+  // -------------------
 
   const [skills] = useState({
     technical: [
@@ -331,8 +356,49 @@ export default function Home() {
     </AnimatePresence>
   )
   
+  // --- START SCREEN OVERLAY ---
+  const IntroOverlay = () => (
+    <AnimatePresence>
+      {showIntro && (
+        <motion.div
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 0.8 } }}
+          className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center"
+        >
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-4xl md:text-6xl font-bold text-white mb-8"
+          >
+            Gautam Manchandani
+          </motion.h1>
+          
+          <motion.button
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleEnterSite}
+            className="px-8 py-4 border border-neutral-700 bg-neutral-900 text-white rounded-full text-lg tracking-widest hover:bg-white hover:text-black transition-colors duration-300"
+          >
+            ENTER PORTFOLIO
+          </motion.button>
+          
+          <p className="text-neutral-500 mt-4 text-sm">Click to enter</p>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+   
   return (
     <div className="min-h-screen text-white transition-colors duration-300">
+      
+      {/* --- Audio Element --- */}
+      <audio ref={audioRef} loop src="/bg-music.mp3" />
+      
+      {/* --- Intro Screen --- */}
+      <IntroOverlay />
 
       <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-dark-900/80 backdrop-blur-sm border-b border-neutral-800' : ''}`}>
         <div className="container--wide flex items-center justify-between py-4">
@@ -344,7 +410,7 @@ export default function Home() {
           >
             Gautam Manchandani
           </motion.h1>
-          <nav className="hidden md:flex space-x-4">
+          <nav className="hidden md:flex space-x-4 items-center">
             {navItems.map((item, index) => (
               <motion.a
                 key={item}
@@ -359,9 +425,20 @@ export default function Home() {
                 {item}
               </motion.a>
             ))}
+            
+            {/* --- Audio Toggle Button (Desktop) --- */}
+            <button onClick={toggleAudio} className="p-2 text-gray-400 hover:text-white transition-colors">
+              {isPlaying ? <Volume2 size={20} /> : <VolumeX size={20} />}
+            </button>
+
           </nav>
-          {/* --- Add Mobile Menu Button --- */}
-          <div className="md:hidden">
+          
+          <div className="md:hidden flex items-center gap-4">
+            {/* --- Audio Toggle Button (Mobile) --- */}
+            <button onClick={toggleAudio} className="text-gray-300">
+               {isPlaying ? <Volume2 size={24} /> : <VolumeX size={24} />}
+            </button>
+
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-300 hover:text-white transition-colors"
