@@ -402,14 +402,30 @@ export default function Home() {
 
       <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-dark-900/80 backdrop-blur-sm border-b border-neutral-800' : ''}`}>
         <div className="container--wide flex items-center justify-between py-4">
-          <motion.h1
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-2xl font-bold text-gray-100"
-          >
-            Gautam Manchandani
-          </motion.h1>
+          <motion.div
+             initial={{ opacity: 0, x: -20 }}
+             animate={{ opacity: 1, x: 0 }}
+             transition={{ duration: 0.5 }}
+             className="relative"
+           >
+             {/* Brush stroke background */}
+             <svg 
+               className="absolute inset-0 w-full h-full -z-10" 
+               viewBox="0 0 320 100" 
+               preserveAspectRatio="none"
+               style={{ left: '-20px', top: '-18px', width: 'calc(100% + 40px)', height: 'calc(100% + 36px)' }}
+             >
+               <path 
+                 d="M5 30 Q160 25 315 30 L315 70 Q160 75 5 70 Z"
+                 fill="rgba(168, 85, 247, 0.5)"
+                 stroke="rgba(168, 85, 247, 0.6)"
+                 strokeWidth="2.5"
+               />
+             </svg>
+             <h1 className="text-2xl font-bold text-gray-100 relative z-10 px-3">
+               Gautam Manchandani
+             </h1>
+           </motion.div>
           <nav className="hidden md:flex space-x-4 items-center">
             {navItems.map((item, index) => (
               <motion.a
@@ -436,7 +452,7 @@ export default function Home() {
           <div className="md:hidden flex items-center gap-4">
             {/* --- Audio Toggle Button (Mobile) --- */}
             <button onClick={toggleAudio} className="text-gray-300">
-               {isPlaying ? <Volume2 size={24} /> : <VolumeX size={24} />}
+                {isPlaying ? <Volume2 size={24} /> : <VolumeX size={24} />}
             </button>
 
             <button
