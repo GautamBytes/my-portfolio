@@ -1,17 +1,18 @@
 import './globals.css'
-import localFont from "next/font/local";
+import { Rubik, Special_Elite } from "next/font/google";
+import StarBackground from './components/StarBackground';
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const rubik = Rubik({
+  subsets: ["latin"],
+  variable: "--font-rubik",
+  weight: ["400", "700", "900"],
   display: "swap"
 });
 
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const specialElite = Special_Elite({
+  subsets: ["latin"],
+  variable: "--font-typewriter",
+  weight: "400",
   display: "swap"
 });
 
@@ -23,9 +24,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* global wrapper provides the grid background and subtle vignette */}
-        <div className="app-bg min-h-screen">
+      <body className={`${rubik.variable} ${specialElite.variable} antialiased`}>
+        <StarBackground />
+        <div className="app-bg">
           {children}
         </div>
       </body>

@@ -2,197 +2,119 @@
 @tailwind components;
 @tailwind utilities;
 
-/* color tokens */
 :root {
-  --bg-900: #0a0a0a;
-  --bg-800: #111111;
+  /* Updated to Pitch Black & Very Dark Gray */
+  --bg-space-dark: #000000; 
+  --bg-space-light: #050505;
   --border-color: #27272a;
-  --card: #111111;
   --muted: #a1a1aa;
-  --mono: var(--font-geist-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace);
-  --sans: var(--font-geist-sans, Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial);
+  --typewriter: var(--font-typewriter), monospace;
+  --sans: var(--font-rubik), sans-serif;
 }
 
-/* dark-first design; respects prefers-color-scheme but we force dark look */
-html, body, #__next {
+html, body {
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
   color: #e4e4e7;
-  background: var(--bg-900);
+  background-color: #000000; /* Fallback */
+  /* Tighter, darker spotlight. Starts dark gray, fades to pure black quickly */
+  background: radial-gradient(circle at 50% 0%, var(--bg-space-light), var(--bg-space-dark) 50%);
+  background-attachment: fixed;
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* --- Add Fixed Spotlight Effect --- */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none; /* Allows clicking through the overlay */
-  z-index: 9999;
-  background: radial-gradient(ellipse 100vw 100vh at 100% 0%,
-    rgba(173, 216, 230, 0.12),
-    transparent 50%);
+.font-typewriter {
+  font-family: var(--typewriter);
 }
 
-/* APP BACKDROP + GRID */
+/* --- STAR ANIMATIONS --- */
+@keyframes starMove {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-2000px); }
+}
+
+.animate-star-move-slow { animation: starMove 150s linear infinite; }
+.animate-star-move-medium { animation: starMove 100s linear infinite; }
+.animate-star-move-fast { animation: starMove 50s linear infinite; }
+
+/* --- NOISE TEXTURE OVERLAY --- */
 .app-bg {
-  background-color: var(--bg-900);
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
+  position: relative;
   min-height: 100vh;
+  width: 100%;
+  /* REDUCED OPACITY: Lowered to 0.02 for deeper black contrast */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  z-index: 1; 
   padding-bottom: 6rem;
 }
 
-/* container sizing used across pages */
 .container--wide {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-/* CODE CARD styling (right-side hero) */
-.code-card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border: 1px solid rgba(255,255,255,0.04);
-  padding: 1.5rem;
+/* --- GLASS SURFACE (Cards) --- */
+.surface {
+  /* Much darker glass to preserve contrast */
+  background: rgba(0, 0, 0, 0.6); 
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(2,6,23,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
-  min-width: 360px;
-  font-family: var(--mono);
-  color: #cfe9ff;
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5); /* Darker shadow */
 }
 
-/* little window circles like macos top-left dots */
-.code-card .dots {
-  position: absolute;
-  top: 12px;
-  left: 14px;
-  display: flex;
-  gap: 8px;
-}
-.code-card .dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  opacity: 0.95;
-}
-.code-card .dot.red { background: #ff6b6b; }
-.code-card .dot.yellow { background: #f7c948; }
-.code-card .dot.green { background: #4ee07a; }
-
-.code-snippet {
-  font-size: 13px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  margin-top: 2.2rem;
-  color: #bfe7ff;
-}
-
-/* large avatar with rounded corners */
+/* Avatar Image Styling */
 .avatar-spot {
   width: 420px;
   height: 420px;
-  border-radius: 24px; /* Changed from 9999px */
+  border-radius: 24px;
   position: relative;
   overflow: hidden; 
   display: inline-block;
-  transform: translateZ(0);
 }
-.avatar-spot::after {
-  content: none;
-}
-
-/* avatar image itself */
 .avatar-img {
   width: 100%;
   height: 100%;
-  border-radius: 24px; /* Changed from 9999px */
+  border-radius: 24px;
   object-fit: cover;
-  display: block;
-  position: relative;
-  z-index: 3;
   border: 2px solid var(--border-color);
 }
 
-/* --- Custom Nav Button Style --- */
+/* Nav Button */
 .nav-button-custom {
-  background-color: white; /* White background */
-  border: 2px solid #800080; /* Purple border */
-  color: black; /* Black text */
+  background-color: white;
+  border: 2px solid #800080;
+  color: black;
   padding: 0.35rem 0.8rem;
-  border-radius: 9999px; /* Pill shape */
+  border-radius: 9999px;
   font-weight: 500;
   font-size: 0.9rem;
-  box-shadow: 3px 3px 0px 0px #800080; /* Purple shadow for lifted effect */
+  box-shadow: 3px 3px 0px 0px #800080;
   transition: all 0.1s ease-in-out;
-  position: relative;
-  top: 0;
-  left: 0;
 }
 .nav-button-custom:hover {
-  transform: translate(-1px, -1px);  /* Lift effect on hover */
-  box-shadow: 4px 4px 0px 0px #800080; /* Larger shadow on hover */
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px #800080;
 }
 
-/* --- Add Custom Cursor for interactive elements --- */
+/* Custom Cursor */
 a, button, [role="button"] {
-  cursor: url('/cursor.png'), pointer;
+  cursor: pointer; 
 }
 
-/* subtle glass panels used for section backgrounds */
-.surface {
-  background: var(--bg-800);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 1.25rem;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-}
-
-/* call-to-action button look */
-.btn-primary {
-  background: #171717;
-  border: 1px solid var(--border-color);
-  color: white;
-  padding: 0.7rem 1.15rem;
-  border-radius: 10px;
-  font-weight: 600;
-}
-
-/* secondary ghost button */
-.btn-ghost {
-  background: transparent;
-  border: 1px solid var(--border-color);
-  color: var(--muted);
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-}
-
-/* smaller utility tweaks */
-h2.gradient {
-  background: linear-gradient(90deg, #d4d4d4, #fafafa);
-  -webkit-background-clip: text;
-  color: transparent;
-  font-weight: 800;
-}
-
+/* Utilities */
 a { text-decoration: none; }
 
-/* responsive adjustments */
 @media (max-width: 1024px) {
   .avatar-spot { width: 320px; height: 320px; }
-  .code-card { min-width: 280px; }
 }
 @media (max-width: 640px) {
   .container--wide { padding: 1rem; }

@@ -422,7 +422,7 @@ export default function Home() {
                  strokeWidth="2.5"
                />
              </svg>
-             <h1 className="text-2xl font-bold text-gray-100 relative z-10 px-3">
+             <h1 className="text-2xl font-bold text-[#FFD952] relative z-10 px-3">
                Gautam Manchandani
              </h1>
            </motion.div>
@@ -521,10 +521,10 @@ export default function Home() {
               </motion.div>
               <div className="flex-1 px-6 lg:px-0">
                 <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-gray-100">About Me</h2>
-                <p className="text-lg mb-4 text-neutral-400">
+                <p className="text-lg mb-4 text-[#FFD952] font-typewriter tracking-wide">
                   Intern @Shopstr | Bitshala Dev Fellow | SOB&apos;25 | Former PM intern @BuildFastwithAI | 2nd@(ICCRIP 2024) | 3rd@(IITD Tryst) | CS@BITS PILANI
                 </p>
-                <p className="text-lg mb-8 text-neutral-400">
+                <p className="text-lg mb-8 text-neutral-400 font-sans leading-relaxed">
                   Hi, I&apos;m Gautam Manchandani, a third-year Computer Science student at BITS Pilani with a deep passion for open-source development and the Bitcoin ecosystem. I am currently honing my skills as an Open Source Bitcoin Engineer Intern at Shopstr and contributing to impactful projects as a Bitshala Dev Fellow. My journey includes a successful Summer of Bitcoin &apos;25 mentorship and a background in AI/ML, highlighted by my contributions during Hacktoberfest &apos;24. I am dedicated to building secure, decentralized financial solutions.
                 </p>
                 <div className="flex flex-wrap gap-4">
@@ -572,7 +572,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-dark-800 rounded-lg shadow-md overflow-hidden surface"
+                  className="rounded-lg shadow-md overflow-hidden surface"
                 >
                   <div className="grid md:grid-cols-[300px_1fr] gap-6">
                     <div className="relative h-[200px] md:h-full">
@@ -626,7 +626,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-dark-800 rounded-lg shadow-md overflow-hidden surface"
+                  className="rounded-lg shadow-md overflow-hidden surface"
                 >
                   <div className="p-6">
                     <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
@@ -708,7 +708,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-dark-800 rounded-lg shadow-md p-6 surface"
+                  className="rounded-lg shadow-md p-6 surface"
                 >
                   <div className="flex items-center mb-4">
                     <Briefcase size={24} className="text-neutral-400 mr-2" />
@@ -756,7 +756,7 @@ export default function Home() {
           >
             <h2 className="text-3xl font-bold mb-8 text-center">Skills</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-dark-800 border border-gray-700 p-4 rounded-lg shadow-md surface">
+              <div className="border border-gray-700 p-4 rounded-lg shadow-md surface">
                 <h3 className="text-2xl font-semibold mb-6">Technical Skills</h3>
                 {skills.technical.map((category, index) => (
                   <div key={category.category} className="mb-6 last:mb-0">
@@ -787,7 +787,7 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <div className="bg-dark-800 border border-gray-700 p-4 rounded-lg shadow-md h-fit surface">
+              <div className="border border-gray-700 p-4 rounded-lg shadow-md h-fit surface">
                 <h3 className="text-2xl font-semibold mb-4">Soft Skills</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {skills.soft.map((skill, index) => (
@@ -821,7 +821,7 @@ export default function Home() {
               {achievements.map((achievement, index) => (
                 <motion.div
                   key={achievement.title}
-                  className="bg-dark-800 rounded-lg shadow-md p-6 flex flex-col items-center text-center surface"
+                  className="rounded-lg shadow-md p-6 flex flex-col items-center text-center surface"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -885,7 +885,7 @@ export default function Home() {
           >
             <h2 className="text-3xl font-bold mb-8 text-center">YouTube Channel</h2>
             <motion.div
-              className="bg-dark-800 rounded-2xl p-8 surface"
+              className="rounded-2xl p-8 surface"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
@@ -975,7 +975,7 @@ export default function Home() {
               {gears.map((item, index) => (
                 <motion.div
                   key={item.name}
-                  className="bg-dark-800 rounded-lg shadow-md overflow-hidden surface cursor-pointer"
+                  className="rounded-lg shadow-md overflow-hidden surface cursor-pointer"
                   onClick={() => setSelectedGear(item)} 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -1129,7 +1129,7 @@ export default function Home() {
         </AnimatePresence>
       </main>
 
-      <footer className="bg-dark-800 py-8 border-t border-neutral-800">
+      <footer className="bg-black/50 backdrop-blur-md py-8 border-t border-neutral-800">
         <div className="container--wide flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm">
             © {new Date().getFullYear()} Gautam Manchandani. All rights reserved.
