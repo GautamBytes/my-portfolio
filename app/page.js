@@ -6,6 +6,9 @@ import Image from 'next/image'
 // Added Volume2 and VolumeX to imports
 import { Sun, Moon, Download, Github, ExternalLink, Briefcase, Calendar, Award, Star, Send, Linkedin, Twitter, ArrowUp, ChevronDown, ChevronUp, Building, X, Menu, Bell, Check, Play, Youtube, Volume2, VolumeX } from 'lucide-react'
 
+import dynamic from 'next/dynamic'
+const Shinchan3D = dynamic(() => import('./components/Shinchan3D'), { ssr: false })
+
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [showAllProjects, setShowAllProjects] = useState(false)
@@ -443,7 +446,7 @@ export default function Home() {
             ))}
             
             {/* --- Audio Toggle Button (Desktop) --- */}
-            <button onClick={toggleAudio} className="p-2 text-gray-400 hover:text-white transition-colors">
+            <button onClick={toggleAudio} className="p-2 text-gray-400 hover:text-white transition-colors" suppressHydrationWarning>
               {isPlaying ? <Volume2 size={20} /> : <VolumeX size={20} />}
             </button>
 
@@ -451,7 +454,7 @@ export default function Home() {
           
           <div className="md:hidden flex items-center gap-4">
             {/* --- Audio Toggle Button (Mobile) --- */}
-            <button onClick={toggleAudio} className="text-gray-300">
+            <button onClick={toggleAudio} className="text-gray-300" suppressHydrationWarning>
                 {isPlaying ? <Volume2 size={24} /> : <VolumeX size={24} />}
             </button>
 
@@ -497,6 +500,7 @@ export default function Home() {
         <AnimatePresence>
           {/* About Section */}
           <motion.section
+            key="about"
             id="about"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -515,6 +519,7 @@ export default function Home() {
                     alt="Gautam Manchandani"
                     fill
                     className="object-cover object-center avatar-img"
+                    sizes="(max-width: 768px) 100vw, 450px"
                     priority
                   />
                 </div>
@@ -557,6 +562,7 @@ export default function Home() {
 
           {/* Education Section */}
           <motion.section
+            key="education"
             id="education"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -581,6 +587,7 @@ export default function Home() {
                         alt={edu.school}
                         fill
                         className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 300px"
                       />
                     </div>
                     <div className="p-6">
@@ -611,6 +618,7 @@ export default function Home() {
 
           {/* Projects Section */}
           <motion.section
+            key="projects"
             id="projects"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -674,6 +682,7 @@ export default function Home() {
                 <button
                   onClick={() => setShowAllProjects(!showAllProjects)}
                   className="inline-flex items-center px-4 py-2 bg-neutral-900 border border-neutral-700 text-white rounded-md hover:bg-neutral-800 transition-colors duration-300"
+                  suppressHydrationWarning
                 >
                   {showAllProjects ? (
                     <>
@@ -693,6 +702,7 @@ export default function Home() {
 
           {/* Experience Section */}
           <motion.section
+            key="experience"
             id="experience"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -747,6 +757,7 @@ export default function Home() {
 
           {/* Skills Section */}
           <motion.section
+            key="skills"
             id="skills"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -787,28 +798,39 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <div className="border border-gray-700 p-4 rounded-lg shadow-md h-fit surface">
-                <h3 className="text-2xl font-semibold mb-4">Soft Skills</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {skills.soft.map((skill, index) => (
-                    <motion.div
-                      key={skill}
-                      className="bg-neutral-900 border border-neutral-800 rounded-lg p-3 text-center"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      <span className="text-neutral-200 font-medium">{skill}</span>
-                    </motion.div>
-                  ))}
+              <div className="flex flex-col gap-8">
+                <div className="border border-gray-700 p-4 rounded-lg shadow-md h-fit surface">
+                  <h3 className="text-2xl font-semibold mb-4">Soft Skills</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    {skills.soft.map((skill, index) => (
+                      <motion.div
+                        key={skill}
+                        className="bg-neutral-900 border border-neutral-800 rounded-lg p-3 text-center"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        whileHover={{ scale: 1.05 }}
+                      >
+                        <span className="text-neutral-200 font-medium">{skill}</span>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8 }}
+                  className="border border-gray-700 rounded-lg shadow-md surface overflow-hidden flex-1 min-h-[300px] flex items-center justify-center bg-neutral-900/50"
+                >
+                    <Shinchan3D />
+                </motion.div>
               </div>
-            </div>
-          </motion.section>
+             </div>
+           </motion.section>
 
           {/* Achievements Section */}
           <motion.section
+            key="achievements"
             id="achievements"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -848,6 +870,7 @@ export default function Home() {
 
           {/* GitHub Contributions Section */}
           <motion.section
+            key="github"
             id="github"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -876,6 +899,7 @@ export default function Home() {
 
           {/* YouTube Section */}
           <motion.section
+            key="youtube"
             id="youtube"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -896,6 +920,7 @@ export default function Home() {
                     alt="YouTube Channel Coming Soon"
                     fill
                     className="rounded-xl object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                   <motion.div
                     className="absolute inset-0 flex items-center justify-center z-20"
@@ -951,6 +976,7 @@ export default function Home() {
                       className="inline-flex items-center justify-center px-6 py-3 bg-neutral-800 text-gray-200 rounded-xl hover:bg-neutral-700 transition-colors duration-300 text-lg font-medium"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
+                      suppressHydrationWarning
                     >
                       <Bell size={24} className="mr-2" />
                       Get Notified
@@ -963,6 +989,7 @@ export default function Home() {
 
           {/* Gears Section */}
           <motion.section
+            key="gears"
             id="gears"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -988,6 +1015,7 @@ export default function Home() {
                       alt={item.name}
                       fill
                       className="object-contain p-4" 
+                      sizes="(max-width: 768px) 100vw, 33vw"
                     />
                   </div>
                   <div className="p-6">
@@ -1002,6 +1030,7 @@ export default function Home() {
 
           {/* Contact Section */}
           <motion.section
+            key="contact"
             id="contact"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1036,6 +1065,7 @@ export default function Home() {
                       name="name"
                       required
                       className="w-full px-3 py-2 border border-neutral-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 bg-neutral-900 text-white"
+                      suppressHydrationWarning
                     />
                   </motion.div>
                   <motion.div
@@ -1052,6 +1082,7 @@ export default function Home() {
                       name="email"
                       required
                       className="w-full px-3 py-2 border border-neutral-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 bg-neutral-900 text-white"
+                      suppressHydrationWarning
                     />
                   </motion.div>
                   <motion.div
@@ -1068,6 +1099,7 @@ export default function Home() {
                       rows={4}
                       required
                       className="w-full px-3 py-2 border border-neutral-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 bg-neutral-900 text-white"
+                      suppressHydrationWarning
                     ></textarea>
                   </motion.div>
                   <motion.button
@@ -1075,6 +1107,7 @@ export default function Home() {
                     className="w-full flex justify-center items-center px-4 py-2 border border-neutral-700 rounded-md shadow-sm text-base font-medium text-white bg-neutral-900 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    suppressHydrationWarning
                   >
                     <Send size={20} className="mr-2" />
                     Send Message
@@ -1139,6 +1172,7 @@ export default function Home() {
             className="mt-4 md:mt-0 bg-neutral-800 text-white p-2 rounded-full shadow-lg"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
+            suppressHydrationWarning
           >
             <ArrowUp size={20} />
           </motion.button>

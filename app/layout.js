@@ -23,7 +23,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${rubik.variable} ${specialElite.variable} antialiased`}>
         <StarBackground />
         <div className="app-bg">
