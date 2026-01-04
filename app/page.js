@@ -917,7 +917,7 @@ export default function Home() {
                 <div className="relative aspect-video w-full overflow-hidden rounded-xl">
                   <Image
                     src="/Youtube_img.jpg"
-                    alt="YouTube Channel Coming Soon"
+                    alt="Gautam Manchandani YouTube Channel"
                     fill
                     className="rounded-xl object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -934,7 +934,7 @@ export default function Home() {
                 <div className="space-y-6">
                   <div className="space-y-4">
                     <h3 className="text-3xl font-bold text-gray-100">
-                      Exciting Content Coming Soon!
+                      Fresh Content Dropping Now!
                     </h3>
                     <p className="text-gray-300 text-lg">
                       Get ready for an amazing journey into the world of technology! Subscribe now and be the first to experience:
@@ -944,7 +944,7 @@ export default function Home() {
                         <span className="w-6 h-6 rounded-full bg-green-400/20 flex items-center justify-center">
                           <Check className="w-4 h-4 text-green-500" />
                         </span>
-                        <span>AI/ML Project Tutorials</span>
+                        <span>My Personal Life lessons</span>
                       </li>
                       <li className="flex items-center space-x-2 text-gray-300">
                         <span className="w-6 h-6 rounded-full bg-green-400/20 flex items-center justify-center">
