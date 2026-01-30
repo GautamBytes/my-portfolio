@@ -16,6 +16,25 @@ export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [selectedGear, setSelectedGear] = useState(null) 
 
+  // --- YOUTUBE STATE & LOGIC ---
+  const [youtubeData, setYoutubeData] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/youtube')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.error) setYoutubeData(data);
+      })
+      .catch((err) => console.error("YouTube Fetch Error:", err));
+  }, []);
+
+  const formatCount = (n) => {
+    if (n < 1000) return n;
+    if (n >= 1000 && n < 1000000) return (n / 1000).toFixed(1) + 'K';
+    return (n / 1000000).toFixed(1) + 'M';
+  };
+  // ---------------------------
+
   // --- AUDIO STATE ---
   const [isPlaying, setIsPlaying] = useState(false)
   const [showIntro, setShowIntro] = useState(true) // Controls the "Enter" screen
@@ -171,6 +190,14 @@ export default function Home() {
   ]
 
   const experiences = [
+    {
+      title: 'PLDG Fellow (Cohort-6)',
+      company: 'Protocol Labs',
+      duration: 'Jan 2026 - Present',
+      description: 'Contributing to the libp2p networking stack and Open Source Observer. Implemented WebSocket transport and resolved critical NAT traversal & interoperability issues in py-libp2p to enhance global peer-to-peer connectivity.',
+      skills: ['Python', 'libp2p', 'Networking', 'Open Source', 'Web3'],
+      link: 'https://www.linkedin.com/in/gautam-manchandani/'
+    },
     {
       title: 'Bitcoin Dev Fellow',
       company: 'Bitshala',
@@ -527,7 +554,7 @@ export default function Home() {
               <div className="flex-1 px-6 lg:px-0">
                 <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-gray-100">About Me</h2>
                 <p className="text-lg mb-4 text-[#FFD952] font-typewriter tracking-wide">
-                  Intern @Shopstr | Bitshala Dev Fellow | SOB&apos;25 | Former PM intern @BuildFastwithAI | 2nd@(ICCRIP 2024) | 3rd@(IITD Tryst) | CS@BITS PILANI
+                  PLDG Fellow Cohort-6 | Intern @Shopstr | Bitshala Dev Fellow | SOB&apos;25 | Former PM intern @BuildFastwithAI | 2nd@(ICCRIP 2024) | 3rd@(IITD Tryst) | CS@BITS PILANI
                 </p>
                 <p className="text-lg mb-8 text-neutral-400 font-sans leading-relaxed">
                   Hi, I&apos;m Gautam Manchandani, a third-year Computer Science student at BITS Pilani with a deep passion for open-source development and the Bitcoin ecosystem. I am currently honing my skills as an Open Source Bitcoin Engineer Intern at Shopstr and contributing to impactful projects as a Bitshala Dev Fellow. My journey includes a successful Summer of Bitcoin &apos;25 mentorship and a background in AI/ML, highlighted by my contributions during Hacktoberfest &apos;24. I am dedicated to building secure, decentralized financial solutions.
@@ -897,7 +924,7 @@ export default function Home() {
             </motion.div>
           </motion.section>
 
-          {/* YouTube Section */}
+          {/* YouTube Section - DYNAMICALLY UPDATED */}
           <motion.section
             key="youtube"
             id="youtube"
@@ -907,34 +934,53 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
-            <h2 className="text-3xl font-bold mb-8 text-center">YouTube Channel</h2>
+            <h2 className="text-3xl font-bold mb-8 text-center">
+              YouTube Channel
+              {youtubeData && (
+                <span className="ml-4 text-sm bg-red-600 text-white px-3 py-1 rounded-full align-middle">
+                  {formatCount(youtubeData.subscriberCount)} Subs
+                </span>
+              )}
+            </h2>
             <motion.div
               className="rounded-2xl p-8 surface"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
               <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="relative aspect-video w-full overflow-hidden rounded-xl">
-                  <Image
-                    src="/Youtube_img.jpg"
-                    alt="Gautam Manchandani YouTube Channel"
-                    fill
-                    className="rounded-xl object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  <motion.div
-                    className="absolute inset-0 flex items-center justify-center z-20"
-                    whileHover={{ scale: 1.1 }}
+                <div className="relative aspect-video w-full overflow-hidden rounded-xl group">
+                  {/* Dynamic Video Link Wrapper */}
+                  <a 
+                    href={youtubeData ? youtubeData.video.link : "https://www.youtube.com/@GRM-0925"} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="block w-full h-full relative"
                   >
-                    <div className="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center shadow-lg">
-                      <Play size={32} className="text-white ml-1" />
+                    {/* LATEST VIDEO BADGE */}
+                    {youtubeData && (
+                      <div className="absolute top-3 left-3 z-30 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg border border-red-500/50 animate-pulse">
+                        LATEST VIDEO
+                      </div>
+                    )}
+                    <Image
+                      src={youtubeData ? youtubeData.video.thumbnail : "/Youtube_img.jpg"}
+                      alt="Latest Video"
+                      fill
+                      className="rounded-xl object-contain bg-black transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center z-20 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                        <Play size={32} className="text-white ml-1" />
+                      </div>
                     </div>
-                  </motion.div>
+                  </a>
                 </div>
+                
                 <div className="space-y-6">
                   <div className="space-y-4">
-                    <h3 className="text-3xl font-bold text-gray-100">
-                      Fresh Content Dropping Now!
+                    <h3 className="text-3xl font-bold text-gray-100 line-clamp-2">
+                      {youtubeData ? youtubeData.video.title : "Fresh Content Dropping Now!"}
                     </h3>
                     <p className="text-gray-300 text-lg">
                       Get ready for an amazing journey into the world of technology! Subscribe now and be the first to experience:
@@ -962,7 +1008,7 @@ export default function Home() {
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <motion.a
-                      href="https://www.youtube.com/@GRM-0925"
+                      href="https://www.youtube.com/@GRM-0925?sub_confirmation=1"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center px-6 py-3 bg-neutral-900 border border-neutral-700 text-white rounded-xl hover:bg-neutral-800 transition-colors duration-300 text-lg font-medium shadow-lg"
@@ -970,7 +1016,7 @@ export default function Home() {
                       whileTap={{ scale: 0.95 }}
                     >
                       <Youtube size={24} className="mr-2" />
-                      Subscribe Now
+                      Subscribe {youtubeData ? `(${formatCount(youtubeData.subscriberCount)})` : 'Now'}
                     </motion.a>
                     <motion.button
                       className="inline-flex items-center justify-center px-6 py-3 bg-neutral-800 text-gray-200 rounded-xl hover:bg-neutral-700 transition-colors duration-300 text-lg font-medium"
