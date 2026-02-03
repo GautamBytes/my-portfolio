@@ -1,9 +1,8 @@
 'use client'
-import { useState, useEffect, useRef } from 'react' // Added useRef
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import GitHubCalendar from 'react-github-calendar';
 import Image from 'next/image'
-// Added Volume2 and VolumeX to imports
 import { Sun, Moon, Download, Github, ExternalLink, Briefcase, Calendar, Award, Star, Send, Linkedin, Twitter, ArrowUp, ChevronDown, ChevronUp, Building, X, Menu, Bell, Check, Play, Youtube, Volume2, VolumeX } from 'lucide-react'
 
 import dynamic from 'next/dynamic'
@@ -15,6 +14,8 @@ export default function Home() {
   const [messageSent, setMessageSent] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [selectedGear, setSelectedGear] = useState(null) 
+  const [showVideo, setShowVideo] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // --- YOUTUBE STATE & LOGIC ---
   const [youtubeData, setYoutubeData] = useState(null);
@@ -32,6 +33,12 @@ export default function Home() {
     if (n < 1000) return n;
     if (n >= 1000 && n < 1000000) return (n / 1000).toFixed(1) + 'K';
     return (n / 1000000).toFixed(1) + 'M';
+  };
+
+  const decodeHtml = (html) => {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
   };
   // ---------------------------
 
@@ -276,9 +283,9 @@ export default function Home() {
 
   const gears = [
     {
-      name: 'HP 15s Laptop',
-      description: 'Core i3 11th Gen, 8GB RAM, 512GB SSD',
-      image: '/laptop.png' 
+      name: 'MacBook Air M4',
+      description: '24GB RAM, 512GB SSD',
+      image: '/macbook.png'
     },
     {
       name: 'AULA F75 Mechanical Keyboard',
@@ -340,12 +347,27 @@ export default function Home() {
 
   const navItems = ['Education', 'Projects', 'Experience', 'Achievements', 'github', 'Gears', 'Contact']
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Simulate form submission
-    setTimeout(() => {
-      setMessageSent(true)
-    }, 1000)
+    setIsSubmitting(true)
+    
+    const formData = {
+      name: e.target.name.value,
+      email: e.target.email.value,
+      message: e.target.message.value,
+    }
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      if (res.ok) setMessageSent(true)
+    } catch (error) {
+      console.error(error)
+    }
+    setIsSubmitting(false)
   }
 
   const GearModal = () => (
@@ -505,7 +527,7 @@ export default function Home() {
             transition={{ duration: 0.2 }}
             className="md:hidden fixed top-0 left-0 w-full h-screen bg-neutral-900/95 backdrop-blur-sm z-40"
           >
-            <nav className="flex flex-col items-center justify-center h-full space-y-8">
+            <nav className="flex flex-col items-center justify-center h-full space-y-8 pt-20">
               {navItems.map((item) => (
                 <a
                   key={item}
@@ -533,12 +555,12 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 min-h-[calc(100vh-6rem)] flex items-center"
+            className="py-12 md:py-20 min-h-[calc(100vh-6rem)] flex items-center px-4"
           >
             <div className="flex flex-col lg:flex-row items-center gap-12 max-w-7xl mx-auto">
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                className="w-full lg:w-[450px] h-[450px] relative avatar-spot"
+                className="w-full max-w-[350px] lg:max-w-[450px] h-[350px] lg:h-[450px] mx-auto relative avatar-spot"
               >
                 <div style={{position:'relative', width:'100%', height:'100%'}}>
                   <Image
@@ -552,12 +574,12 @@ export default function Home() {
                 </div>
               </motion.div>
               <div className="flex-1 px-6 lg:px-0">
-                <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-gray-100">About Me</h2>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-gray-100">About Me</h2>
                 <p className="text-lg mb-4 text-[#FFD952] font-typewriter tracking-wide">
                   PLDG Fellow Cohort-6 | Intern @Shopstr | Bitshala Dev Fellow | SOB&apos;25 | Former PM intern @BuildFastwithAI | 2nd@(ICCRIP 2024) | 3rd@(IITD Tryst) | CS@BITS PILANI
                 </p>
                 <p className="text-lg mb-8 text-neutral-400 font-sans leading-relaxed">
-                  Hi, I&apos;m Gautam Manchandani, a third-year Computer Science student at BITS Pilani with a deep passion for open-source development and the Bitcoin ecosystem. I am currently honing my skills as an Open Source Bitcoin Engineer Intern at Shopstr and contributing to impactful projects as a Bitshala Dev Fellow. My journey includes a successful Summer of Bitcoin &apos;25 mentorship and a background in AI/ML, highlighted by my contributions during Hacktoberfest &apos;24. I am dedicated to building secure, decentralized financial solutions.
+                  Hi, I&apos;m Gautam Manchandani, a third-year Computer Science student at BITS Pilani. I’m a developer with a heavy bias for open source. I spend most of my time engineering decentralized systems at Protocol Labs and Shopstr, but I don&apos;t like staying in a box. I&apos;ve worked on AI apps, dabbled in product management, and love exploring how different technologies connect. Whether I&apos;m optimizing networking protocols or building a helpful chatbot, my goal is simple: write good code, contribute to the community, and build things that actually work.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <motion.a
@@ -595,7 +617,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
+            className="py-12 md:py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">Education</h2>
             <div className="space-y-8">
@@ -651,7 +673,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
+            className="py-12 md:py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">Projects</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -735,7 +757,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
+            className="py-12 md:py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">Experience</h2>
             <div className="space-y-8">
@@ -790,7 +812,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
+            className="py-12 md:py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">Skills</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -863,7 +885,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
+            className="py-12 md:py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">Achievements</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -903,11 +925,11 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
+            className="py-12 md:py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">GitHub Contributions</h2>
             <motion.div
-              className="surface p-6 flex justify-center rounded-xl"
+              className="surface p-6 flex overflow-x-auto md:justify-center rounded-xl"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
@@ -932,7 +954,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
+            className="py-12 md:py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">
               YouTube Channel
@@ -949,13 +971,22 @@ export default function Home() {
             >
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div className="relative aspect-video w-full overflow-hidden rounded-xl group">
-                  {/* Dynamic Video Link Wrapper */}
-                  <a 
-                    href={youtubeData ? youtubeData.video.link : "https://www.youtube.com/@GRM-0925"} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="block w-full h-full relative"
-                  >
+                  {showVideo && youtubeData?.video?.videoId ? (
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      src={`https://www.youtube.com/embed/${youtubeData.video.videoId}?autoplay=1`}
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="rounded-xl"
+                    />
+                  ) : (
+                    <div 
+                      onClick={() => setShowVideo(true)}
+                      className="block w-full h-full relative cursor-pointer"
+                    >
                     {/* LATEST VIDEO BADGE */}
                     {youtubeData && (
                       <div className="absolute top-3 left-3 z-30 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg border border-red-500/50 animate-pulse">
@@ -974,13 +1005,14 @@ export default function Home() {
                         <Play size={32} className="text-white ml-1" />
                       </div>
                     </div>
-                  </a>
+                  </div>
+                  )}
                 </div>
                 
                 <div className="space-y-6">
                   <div className="space-y-4">
                     <h3 className="text-3xl font-bold text-gray-100 line-clamp-2">
-                      {youtubeData ? youtubeData.video.title : "Fresh Content Dropping Now!"}
+                      {youtubeData ? decodeHtml(youtubeData.video.title) : "Fresh Content Dropping Now!"}
                     </h3>
                     <p className="text-gray-300 text-lg">
                       Get ready for an amazing journey into the world of technology! Subscribe now and be the first to experience:
@@ -1041,7 +1073,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-6xl mx-auto px-4 md:px-6"
+            className="py-12 md:py-20 max-w-6xl mx-auto px-4 md:px-6"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">My Gears</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -1082,7 +1114,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="py-20 max-w-3xl mx-auto"
+            className="py-12 md:py-20 max-w-3xl mx-auto px-4"
           >
             <h2 className="text-3xl font-bold mb-8 text-center">Contact Me</h2>
             <div className="max-w-3xl mx-auto">
@@ -1150,13 +1182,14 @@ export default function Home() {
                   </motion.div>
                   <motion.button
                     type="submit"
+                    disabled={isSubmitting}
                     className="w-full flex justify-center items-center px-4 py-2 border border-neutral-700 rounded-md shadow-sm text-base font-medium text-white bg-neutral-900 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     suppressHydrationWarning
                   >
                     <Send size={20} className="mr-2" />
-                    Send Message
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
                   </motion.button>
                 </form>
               )}

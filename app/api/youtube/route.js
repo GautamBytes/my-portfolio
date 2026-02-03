@@ -37,6 +37,7 @@ export async function GET() {
       viewCount: channelStats.viewCount,
       video: {
         title: latestVideo.snippet.title,
+        videoId: latestVideo.id.videoId,
         thumbnail: latestVideo.snippet.thumbnails.high.url,
         link: `https://www.youtube.com/watch?v=${latestVideo.id.videoId}`,
         publishedAt: latestVideo.snippet.publishedAt
