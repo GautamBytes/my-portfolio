@@ -1,113 +1,155 @@
-'use client'
-import React, { useRef, useState, useEffect, Suspense } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { useGLTF, OrbitControls, Float, Center } from '@react-three/drei'
+'use client';
 
-function ShinchanModel({ toggleAudio }) {
-  const { scene } = useGLTF('/shinchan.glb')
-  const meshRef = useRef()
-  const [hovered, setHover] = useState(false)
+import { Suspense, useEffect, useRef, useState } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Center, Float, OrbitControls, useGLTF } from '@react-three/drei';
+
+function ShinchanModel({ onToggleAudio, baseScale }) {
+  const { scene } = useGLTF('/shinchan.glb');
+  const meshRef = useRef(null);
+  const [hovered, setHovered] = useState(false);
 
   useFrame((state) => {
-    if (meshRef.current) {
-      const t = state.clock.getElapsedTime()
-      meshRef.current.rotation.y = Math.sin(t / 2) * 0.1 
+    if (!meshRef.current) {
+      return;
     }
-  })
 
-  // Increased scale to 0.9 so he is clearly visible
-  const BASE_SCALE = 0.37
+    const time = state.clock.getElapsedTime();
+    meshRef.current.rotation.y = Math.sin(time / 2) * 0.1;
+  });
 
   return (
     <Center>
-      {/* The Visual Model */}
-      <primitive 
-        ref={meshRef}
-        object={scene} 
-        scale={hovered ? BASE_SCALE * 1.1 : BASE_SCALE}
-        rotation={[0, 0, 0]}
-      />
-
-      {/* THE HIT BOX (The clickable trigger) */}
-      <mesh 
-        onClick={(e) => {
-          e.stopPropagation()
-          toggleAudio()
+      <primitive ref={meshRef} object={scene} scale={hovered ? baseScale * 1.1 : baseScale} rotation={[0, 0, 0]} />
+      <mesh
+        onClick={(event) => {
+          event.stopPropagation();
+          onToggleAudio();
         }}
-        onPointerOver={() => {
-          document.body.style.cursor = 'pointer'
-          setHover(true)
-        }}
-        onPointerOut={() => {
-          document.body.style.cursor = 'auto'
-          setHover(false)
-        }}
-        visible={false} // Invisible box, but still clickable
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+        visible={false}
       >
-        {/* Large box geometry to ensure clicks register easily */}
         <boxGeometry args={[1.2, 1.8, 1]} />
-        <meshBasicMaterial color="red" wireframe={true} transparent opacity={0.5} />
+        <meshBasicMaterial transparent opacity={0} />
       </mesh>
     </Center>
-  )
+  );
 }
 
-export default function Shinchan3D() {
-  const [isTalking, setIsTalking] = useState(false)
-  const audioRef = useRef(null)
-  
+useGLTF.preload('/shinchan.glb');
+
+const REACTION_MESSAGES = {
+  idle: 'Tap me!',
+  unlock: 'Yay! Quest step unlocked!',
+  celebrate: 'Mission complete! Lets build!',
+};
+
+export default function Shinchan3D({ reactionMode = 'idle' }) {
+  const [isTalking, setIsTalking] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [activeReaction, setActiveReaction] = useState(reactionMode);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 640px)');
+
+    const update = (event) => {
+      setIsMobile(event.matches);
+    };
+
+    setIsMobile(mediaQuery.matches);
+    mediaQuery.addEventListener('change', update);
+
+    return () => {
+      mediaQuery.removeEventListener('change', update);
+    };
+  }, []);
+
+  useEffect(() => {
+    setActiveReaction(reactionMode);
+  }, [reactionMode]);
+
+  useEffect(() => {
+    const handleReaction = (event) => {
+      const nextMode = event?.detail?.mode;
+      if (!nextMode || (nextMode !== 'unlock' && nextMode !== 'celebrate')) {
+        return;
+      }
+
+      setActiveReaction(nextMode);
+
+      window.setTimeout(() => {
+        setActiveReaction('idle');
+      }, 2200);
+    };
+
+    window.addEventListener('shinchan:reaction', handleReaction);
+
+    return () => {
+      window.removeEventListener('shinchan:reaction', handleReaction);
+    };
+  }, []);
+
   const toggleAudio = () => {
-    // 1. Auto-pause the main website background music
-    // We look for the audio tag from page.js using its src
-    const bgMusic = document.querySelector('audio[src="/bg-music.mp3"]')
-    if (bgMusic) {
-      bgMusic.pause()
+    const backgroundMusic = document.querySelector('audio[src="/bg-music.mp3"]');
+    if (backgroundMusic) {
+      backgroundMusic.pause();
     }
 
-    // 2. Toggle Logic (Stop if playing, Start if not)
     if (isTalking) {
-      // STOP logic
       if (audioRef.current) {
-        audioRef.current.pause()
-        audioRef.current.currentTime = 0
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
       }
-      setIsTalking(false)
-    } else {
-      // PLAY logic
-      const audio = new Audio('/shinchan.mp3')
-      audio.volume = 1.0 // Louder volume
-      audioRef.current = audio
-    
-      audio.onended = () => setIsTalking(false)
-      audio.play().catch(e => console.error("Audio failed:", e))
-      setIsTalking(true)
+      setIsTalking(false);
+      return;
     }
-  }
+
+    const audio = new Audio('/shinchan.mp3');
+    audio.volume = 1;
+    audioRef.current = audio;
+    audio.onended = () => setIsTalking(false);
+
+    audio
+      .play()
+      .then(() => setIsTalking(true))
+      .catch(() => setIsTalking(false));
+  };
+
+  const reactionScaleBoost = activeReaction === 'celebrate' ? 0.06 : activeReaction === 'unlock' ? 0.03 : 0;
+  const baseScale = (isMobile ? 0.31 : 0.37) + reactionScaleBoost;
+  const floatSpeed = activeReaction === 'celebrate' ? 2.7 : 2;
+  const showMessage = isTalking || activeReaction !== 'idle';
+  const messageText = isTalking ? 'Hii! I am Shinchan!' : REACTION_MESSAGES[activeReaction];
 
   return (
-    <div className="w-full h-[400px] relative mt-8" suppressHydrationWarning>
-      
-      {isTalking && (
-        <div className="absolute top-10 left-1/2 transform -translate-x-1/2 bg-white text-black px-4 py-2 rounded-xl rounded-bl-none z-10 font-bold border-2 border-black animate-bounce">
-          Hii! I am Shinchan!
+    <div className={`relative mt-4 w-full ${isMobile ? 'h-[320px]' : 'h-[390px]'}`}>
+      {showMessage && (
+        <div className={`absolute left-1/2 z-10 -translate-x-1/2 rounded-xl rounded-bl-none border-2 border-black bg-white px-4 py-2 font-semibold text-black ${isMobile ? 'top-4 text-xs' : 'top-8 text-sm'}`}>
+          {messageText}
         </div>
       )}
 
-      <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
-        <ambientLight intensity={0.8} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
-        <pointLight position={[-10, -10, -10]} intensity={1} />
-        
-        <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5}>
-           <Suspense fallback={null}>
-             <ShinchanModel toggleAudio={toggleAudio} />
-           </Suspense>
-        </Float>
+      <div className={`w-full ${isMobile ? 'h-[280px]' : 'h-[340px]'}`}>
+        <Canvas camera={{ position: isMobile ? [0, 0, 5.6] : [0, 0, 5], fov: 50 }} dpr={isMobile ? [1, 1.3] : [1, 1.6]}>
+          <ambientLight intensity={0.8} />
+          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
+          <pointLight position={[-10, -10, -10]} intensity={1} />
 
-        <OrbitControls enableZoom={false} minPolarAngle={Math.PI / 2.5} maxPolarAngle={Math.PI / 1.5} />
-      </Canvas>
-      
-      <p className="text-center text-neutral-500 text-sm mt-2">Tap me!</p>
+          <Float speed={floatSpeed} rotationIntensity={0.2} floatIntensity={0.5}>
+            <Suspense fallback={null}>
+              <ShinchanModel onToggleAudio={toggleAudio} baseScale={baseScale} />
+            </Suspense>
+          </Float>
+
+          <OrbitControls enableZoom={false} minPolarAngle={Math.PI / 2.5} maxPolarAngle={Math.PI / 1.5} />
+        </Canvas>
+      </div>
+
+      <p className={`absolute left-1/2 -translate-x-1/2 text-center text-zinc-500 ${isMobile ? 'bottom-1 text-xs' : 'bottom-0 text-sm'}`}>
+        Tap me!
+      </p>
     </div>
-  )
+  );
 }

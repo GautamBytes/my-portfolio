@@ -1,32 +1,34 @@
-'use client'
-import { useState, useEffect } from 'react'
+'use client';
+
+import { useMemo } from 'react';
+
+function generateStarField(count) {
+  let stars = '';
+
+  for (let index = 0; index < count; index += 1) {
+    const x = Math.floor(Math.random() * 2000);
+    const y = Math.floor(Math.random() * 2000);
+    stars += `${x}px ${y}px #FFF, `;
+  }
+
+  return stars.slice(0, -2);
+}
 
 export default function StarBackground() {
-  const [stars, setStars] = useState({ small: '', medium: '', large: '' })
-
-  useEffect(() => {
-    const generateSpace = (count) => {
-      let value = ''
-      for (let i = 0; i < count; i++) {
-        const x = Math.floor(Math.random() * 2000)
-        const y = Math.floor(Math.random() * 2000)
-        value += `${x}px ${y}px #FFF, `
-      }
-      return value.slice(0, -2)
-    }
-
-    setStars({
-      small: generateSpace(700),
-      medium: generateSpace(200),
-      large: generateSpace(100)
-    })
-  }, [])
+  const stars = useMemo(
+    () => ({
+      small: generateStarField(420),
+      medium: generateStarField(140),
+      large: generateStarField(70),
+    }),
+    []
+  );
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-      <div className="absolute w-[1px] h-[1px] bg-transparent animate-star-move-slow opacity-70" style={{ boxShadow: stars.small }} />
-      <div className="absolute w-[2px] h-[2px] bg-transparent animate-star-move-medium opacity-50" style={{ boxShadow: stars.medium }} />
-      <div className="absolute w-[3px] h-[3px] bg-transparent animate-star-move-fast opacity-30" style={{ boxShadow: stars.large }} />
+    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
+      <div className="animate-star-move-slow absolute h-[1px] w-[1px] bg-transparent opacity-70" style={{ boxShadow: stars.small }} />
+      <div className="animate-star-move-medium absolute h-[2px] w-[2px] bg-transparent opacity-50" style={{ boxShadow: stars.medium }} />
+      <div className="animate-star-move-fast absolute h-[3px] w-[3px] bg-transparent opacity-30" style={{ boxShadow: stars.large }} />
     </div>
-  )
+  );
 }
