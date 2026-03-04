@@ -11,9 +11,8 @@ export default function ProjectsSection({ projects }) {
     <section id="projects" className="section-shell max-w-6xl">
       <h2 className="section-title">Projects</h2>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {visibleProjects.map((project, index) => (
+        {visibleProjects.map((project) => (
           <article key={project.title} className="surface relative p-6">
-            {index < 2 ? <span className="quest-sticker">Shinchan Pick</span> : null}
             <h3 className="text-xl font-semibold text-zinc-100">{project.title}</h3>
             <p className="mt-3 text-sm leading-relaxed text-zinc-300">{project.description}</p>
             <div className="mt-4 flex flex-wrap gap-2">

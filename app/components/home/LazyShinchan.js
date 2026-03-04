@@ -8,7 +8,7 @@ const Shinchan3D = dynamic(() => import('../Shinchan3D'), {
   loading: () => <p className="text-sm text-zinc-400">Loading 3D scene...</p>,
 });
 
-export default function LazyShinchan({ reactionMode = 'idle' }) {
+export default function LazyShinchan() {
   const containerRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -37,7 +37,7 @@ export default function LazyShinchan({ reactionMode = 'idle' }) {
 
   return (
     <div ref={containerRef} className="surface-soft min-h-[300px] rounded-xl p-4">
-      {isVisible ? <Shinchan3D reactionMode={reactionMode} /> : <p className="text-sm text-zinc-400">Scroll to load Shinchan...</p>}
+      {isVisible ? <Shinchan3D /> : <p className="text-sm text-zinc-400">Scroll to load Shinchan...</p>}
     </div>
   );
 }

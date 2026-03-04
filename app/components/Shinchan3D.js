@@ -39,16 +39,9 @@ function ShinchanModel({ onToggleAudio, baseScale }) {
 
 useGLTF.preload('/shinchan.glb');
 
-const REACTION_MESSAGES = {
-  idle: 'Tap me!',
-  unlock: 'Yay! Quest step unlocked!',
-  celebrate: 'Mission complete! Lets build!',
-};
-
-export default function Shinchan3D({ reactionMode = 'idle' }) {
+export default function Shinchan3D() {
   const [isTalking, setIsTalking] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [activeReaction, setActiveReaction] = useState(reactionMode);
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -67,27 +60,11 @@ export default function Shinchan3D({ reactionMode = 'idle' }) {
   }, []);
 
   useEffect(() => {
-    setActiveReaction(reactionMode);
-  }, [reactionMode]);
-
-  useEffect(() => {
-    const handleReaction = (event) => {
-      const nextMode = event?.detail?.mode;
-      if (!nextMode || (nextMode !== 'unlock' && nextMode !== 'celebrate')) {
-        return;
-      }
-
-      setActiveReaction(nextMode);
-
-      window.setTimeout(() => {
-        setActiveReaction('idle');
-      }, 2200);
-    };
-
-    window.addEventListener('shinchan:reaction', handleReaction);
-
     return () => {
-      window.removeEventListener('shinchan:reaction', handleReaction);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
     };
   }, []);
 
@@ -117,17 +94,13 @@ export default function Shinchan3D({ reactionMode = 'idle' }) {
       .catch(() => setIsTalking(false));
   };
 
-  const reactionScaleBoost = activeReaction === 'celebrate' ? 0.06 : activeReaction === 'unlock' ? 0.03 : 0;
-  const baseScale = (isMobile ? 0.31 : 0.37) + reactionScaleBoost;
-  const floatSpeed = activeReaction === 'celebrate' ? 2.7 : 2;
-  const showMessage = isTalking || activeReaction !== 'idle';
-  const messageText = isTalking ? 'Hii! I am Shinchan!' : REACTION_MESSAGES[activeReaction];
+  const baseScale = isMobile ? 0.31 : 0.37;
 
   return (
     <div className={`relative mt-4 w-full ${isMobile ? 'h-[320px]' : 'h-[390px]'}`}>
-      {showMessage && (
+      {isTalking && (
         <div className={`absolute left-1/2 z-10 -translate-x-1/2 rounded-xl rounded-bl-none border-2 border-black bg-white px-4 py-2 font-semibold text-black ${isMobile ? 'top-4 text-xs' : 'top-8 text-sm'}`}>
-          {messageText}
+          Hii! I am Shinchan!
         </div>
       )}
 
@@ -137,7 +110,7 @@ export default function Shinchan3D({ reactionMode = 'idle' }) {
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
           <pointLight position={[-10, -10, -10]} intensity={1} />
 
-          <Float speed={floatSpeed} rotationIntensity={0.2} floatIntensity={0.5}>
+          <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5}>
             <Suspense fallback={null}>
               <ShinchanModel onToggleAudio={toggleAudio} baseScale={baseScale} />
             </Suspense>

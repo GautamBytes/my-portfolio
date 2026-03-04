@@ -3,13 +3,12 @@ import { Award, ArrowUp, Briefcase, Building, Calendar, ExternalLink, Github, St
 
 import ContactSection from './components/home/ContactSection';
 import GearGrid from './components/home/GearGrid';
+import HiringBadge from './components/home/HiringBadge';
 import LazyGitHubCalendar from './components/home/LazyGitHubCalendar';
 import LazyShinchan from './components/home/LazyShinchan';
 import ProjectsSection from './components/home/ProjectsSection';
 import SiteHeader from './components/home/SiteHeader';
 import YouTubeSection from './components/home/YouTubeSection';
-import ShinchanQuestController from './components/quest/ShinchanQuestController';
-import { QUEST_STEPS } from './data/shinchan-quest';
 import {
   achievements,
   education,
@@ -31,22 +30,27 @@ export default function Home() {
     <div id="top" className="min-h-screen text-zinc-100">
       <SiteHeader navItems={navItems} />
 
-      <ShinchanQuestController steps={QUEST_STEPS}>
-        <main className="container--wide">
+      <main className="container--wide">
         <section id="about" className="section-shell min-h-[calc(100vh-6rem)]">
-          <div className="mx-auto flex max-w-6xl flex-col items-center gap-10 lg:flex-row lg:gap-14">
-            <div className="avatar-spot">
-              <Image
-                src="/GM_PIC.webp"
-                alt="Gautam Manchandani"
-                fill
-                className="avatar-img"
-                sizes="(max-width: 1024px) 90vw, 460px"
-                priority
-              />
+          <div className="mx-auto flex max-w-6xl flex-col items-center gap-10 lg:flex-row lg:items-start lg:gap-14">
+            <div className="hero-media-column">
+              <div className="hero-hiring-slot">
+                <HiringBadge />
+              </div>
+
+              <div className="avatar-spot">
+                <Image
+                  src="/GM_PIC.webp"
+                  alt="Gautam Manchandani"
+                  fill
+                  className="avatar-img"
+                  sizes="(max-width: 1024px) 90vw, 460px"
+                  priority
+                />
+              </div>
             </div>
 
-            <div className="flex-1">
+            <div className="flex-1 w-full">
               <p className="mb-3 text-sm uppercase tracking-[0.22em] text-amber-300">Open Source and Product Engineering</p>
               <h1 className="mb-5 text-4xl font-bold tracking-tight text-zinc-100 md:text-5xl">About Me</h1>
               <p className="font-typewriter text-sm leading-relaxed text-amber-200 md:text-base">
@@ -243,9 +247,8 @@ export default function Home() {
 
         <GearGrid gears={gears} />
 
-          <ContactSection />
-        </main>
-      </ShinchanQuestController>
+        <ContactSection />
+      </main>
 
       <footer className="mt-10 border-t border-zinc-800/80 bg-black/55 py-8">
         <div className="container--wide flex flex-col items-center justify-between gap-4 text-sm text-zinc-500 md:flex-row">

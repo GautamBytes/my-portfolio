@@ -64,7 +64,10 @@ export default function ContactSection() {
 
   return (
     <section id="contact" className="section-shell max-w-3xl">
-      <h2 className="section-title">Contact Me</h2>
+      <h2 className="section-title">Book a Call or Drop a Mail</h2>
+      <p className="mb-6 text-center text-sm text-zinc-400">
+        Prefer a quick chat? Book a call. Prefer async? Send me a message below.
+      </p>
 
       {isSent ? (
         <div className="surface rounded-xl border border-emerald-500/30 bg-emerald-900/10 p-5 text-center" role="status" aria-live="polite">
@@ -116,7 +119,7 @@ export default function ContactSection() {
       )}
 
       <div className="mt-8 text-center">
-        <p className="mb-3 text-sm text-zinc-400">Or schedule a meeting directly:</p>
+        <p className="mb-3 text-sm text-zinc-400">Book a call directly:</p>
         <a
           href="https://cal.com/gautam-manchandani"
           target="_blank"

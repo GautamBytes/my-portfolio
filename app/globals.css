@@ -36,6 +36,10 @@ body {
   overflow-x: hidden;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   font-family: var(--sans);
@@ -50,6 +54,16 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+::selection {
+  background: #3f3f46;
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background: #3f3f46;
+  color: #ffffff;
 }
 
 .font-typewriter {
@@ -198,203 +212,91 @@ a {
   object-position: center;
 }
 
-.quest-progress-shell {
-  margin-top: 0.55rem;
+.hero-media-column {
+  width: min(460px, 92vw);
 }
 
-.quest-progress-wrap {
+.hero-hiring-slot {
+  margin-bottom: 1.05rem;
+}
+
+.hiring-badge {
   position: relative;
-  z-index: 20;
-  width: min(360px, 100%);
-  margin-left: auto;
-  margin-right: 0;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 12px;
-  background: rgba(6, 6, 8, 0.84);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  padding: 0.5rem 0.65rem;
-}
-
-.quest-progress-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.42rem;
-}
-
-.quest-pill {
   display: inline-flex;
   align-items: center;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 217, 82, 0.35);
-  background: rgba(30, 23, 8, 0.7);
-  color: #ffe8a0;
-  font-size: 0.71rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  padding: 0.2rem 0.58rem;
-}
-
-.quest-count {
-  color: var(--text-2);
-  font-size: 0.76rem;
-  font-weight: 700;
-}
-
-.quest-track {
+  gap: 0.62rem;
   width: 100%;
-  height: 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  overflow: hidden;
+  border: 1px solid rgba(205, 136, 255, 0.95);
+  background: linear-gradient(180deg, rgba(45, 13, 78, 0.7) 0%, rgba(25, 8, 50, 0.75) 100%);
+  color: #f4ddff;
+  font-weight: 700;
+  font-size: clamp(0.94rem, 1.05vw, 1.2rem);
+  letter-spacing: 0.01em;
+  padding: 0.56rem 0.94rem;
+  box-shadow:
+    0 0 0 1px rgba(196, 123, 255, 0.24) inset,
+    0 0 12px rgba(180, 71, 255, 0.5),
+    0 0 24px rgba(154, 49, 255, 0.34);
+  transition: transform 0.18s ease;
+  animation: hiringBadgePulse 1.9s ease-in-out infinite;
 }
 
-.quest-fill {
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #facc15, #22c55e);
-  transition: width 240ms ease;
+.hiring-badge:hover {
+  transform: translateY(-1px) scale(1.004);
 }
 
-.quest-label {
-  margin-top: 0.36rem;
-  margin-bottom: 0;
-  color: var(--text-3);
-  font-size: 0.74rem;
+.hiring-badge:focus-visible {
+  outline: 2px solid #e1b4ff;
+  outline-offset: 4px;
 }
 
-.shinchan-companion {
-  position: fixed;
-  right: 1rem;
-  bottom: 1.05rem;
-  z-index: 46;
-  width: min(320px, calc(100% - 1.5rem));
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 14px;
-  background: rgba(10, 10, 12, 0.88);
-  backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.5);
-  padding: 0.75rem;
-}
-
-.companion-head {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.companion-avatar {
+.hiring-badge__dot {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 0.84rem;
+  height: 0.84rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 217, 82, 0.3);
-  background: rgba(44, 33, 12, 0.75);
-  color: #ffe39a;
-  font-size: 0.72rem;
-  font-weight: 800;
+  background: #d28cff;
+  box-shadow: 0 0 9px rgba(210, 140, 255, 0.75);
+  animation: hiringDotBlink 1.2s steps(1, end) infinite;
 }
 
-.companion-title {
-  margin: 0;
-  color: var(--text-1);
-  font-size: 0.86rem;
-  font-weight: 700;
+.hiring-badge__text {
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
-.companion-subtitle {
-  margin: 0;
-  color: var(--text-3);
-  font-size: 0.74rem;
+#contact {
+  scroll-margin-top: 6.5rem;
 }
 
-.companion-message {
-  margin-top: 0.58rem;
-  margin-bottom: 0;
-  color: var(--text-2);
-  font-size: 0.83rem;
-  line-height: 1.4;
+@keyframes hiringBadgePulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(196, 123, 255, 0.24) inset,
+      0 0 12px rgba(180, 71, 255, 0.5),
+      0 0 24px rgba(154, 49, 255, 0.34);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(196, 123, 255, 0.35) inset,
+      0 0 18px rgba(187, 84, 255, 0.72),
+      0 0 30px rgba(162, 66, 255, 0.48);
+  }
 }
 
-.companion-cta-row {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.66rem;
-}
+@keyframes hiringDotBlink {
+  0%,
+  60% {
+    opacity: 1;
+  }
 
-.companion-cta {
-  flex: 1;
-  text-align: center;
-  border-radius: 9px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(20, 20, 23, 0.88);
-  color: var(--text-2);
-  font-size: 0.76rem;
-  font-weight: 600;
-  padding: 0.45rem 0.5rem;
-  transition: transform 0.15s ease, border-color 0.2s ease;
-}
-
-.companion-cta:hover {
-  border-color: rgba(255, 255, 255, 0.28);
-  transform: translateY(-1px);
-}
-
-.unlock-toast {
-  position: fixed;
-  right: 1rem;
-  top: 6.4rem;
-  z-index: 47;
-  width: min(300px, calc(100% - 2rem));
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
-  background: rgba(8, 8, 11, 0.92);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
-  padding: 0.66rem 0.72rem;
-}
-
-.unlock-toast-title {
-  margin: 0;
-  color: #ffe39a;
-  font-size: 0.84rem;
-  font-weight: 700;
-}
-
-.unlock-toast-line {
-  margin-top: 0.35rem;
-  margin-bottom: 0;
-  color: var(--text-2);
-  font-size: 0.78rem;
-}
-
-.unlock-toast-reward {
-  display: inline-flex;
-  margin-top: 0.42rem;
-  border-radius: 999px;
-  border: 1px solid rgba(34, 197, 94, 0.45);
-  background: rgba(4, 52, 30, 0.45);
-  color: #9ee6b7;
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 0.16rem 0.55rem;
-}
-
-.quest-sticker {
-  position: absolute;
-  right: 0.8rem;
-  top: 0.8rem;
-  border: 1px solid rgba(250, 204, 21, 0.45);
-  border-radius: 999px;
-  background: rgba(74, 54, 10, 0.58);
-  color: #fde68a;
-  font-size: 0.66rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  padding: 0.18rem 0.5rem;
+  61%,
+  100% {
+    opacity: 0.45;
+  }
 }
 
 @keyframes starMove {
@@ -435,31 +337,19 @@ a {
     -webkit-backdrop-filter: blur(6px);
   }
 
-  .quest-progress-shell {
-    margin-top: 0.45rem;
+  .hiring-badge {
+    font-size: clamp(0.86rem, 3.8vw, 1rem);
+    gap: 0.52rem;
+    padding: 0.52rem 0.8rem;
   }
 
-  .quest-progress-wrap {
-    width: 100%;
+  .hiring-badge__dot {
+    width: 0.68rem;
+    height: 0.68rem;
   }
 
-  .shinchan-companion {
-    left: 0.5rem;
-    right: 0.5rem;
-    bottom: 0.65rem;
-    width: auto;
-    padding: 0.62rem;
-  }
-
-  .companion-message {
-    font-size: 0.78rem;
-  }
-
-  .unlock-toast {
-    right: 0.6rem;
-    left: 0.6rem;
-    top: 7.7rem;
-    width: auto;
+  .hiring-badge__text {
+    white-space: normal;
   }
 }
 
@@ -479,8 +369,34 @@ a {
     animation: none !important;
   }
 
-  .quest-fill,
-  .companion-cta {
-    transition: none !important;
+  .hiring-badge {
+    animation: none !important;
+  }
+
+  .hiring-badge__dot {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: url('/bear-cursor.svg') 1 1, auto;
+  }
+
+  a,
+  button,
+  select,
+  summary,
+  [role='button'],
+  [type='button'],
+  [type='submit'] {
+    cursor: url('/bear-cursor.svg') 1 1, pointer;
+  }
+
+  input,
+  textarea,
+  [contenteditable='true'] {
+    cursor: text;
   }
 }
