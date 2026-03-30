@@ -381,7 +381,7 @@ a {
 
 @media (hover: hover) and (pointer: fine) {
   body {
-    cursor: url('/bear-cursor.svg') 1 1, auto;
+    cursor: auto;
   }
 
   a,
@@ -391,7 +391,7 @@ a {
   [role='button'],
   [type='button'],
   [type='submit'] {
-    cursor: url('/bear-cursor.svg') 1 1, pointer;
+    cursor: pointer;
   }
 
   input,

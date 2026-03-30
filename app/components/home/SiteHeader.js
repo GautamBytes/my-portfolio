@@ -6,7 +6,6 @@ import { Menu, Volume2, VolumeX, X } from 'lucide-react';
 export default function SiteHeader({ navItems }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showIntro, setShowIntro] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
@@ -42,23 +41,6 @@ export default function SiteHeader({ navItems }) {
     };
   }, [isMenuOpen]);
 
-  const handleEnterSite = async () => {
-    setShowIntro(false);
-
-    if (!audioRef.current) {
-      return;
-    }
-
-    audioRef.current.volume = 0.5;
-
-    try {
-      await audioRef.current.play();
-      setIsPlaying(true);
-    } catch {
-      setIsPlaying(false);
-    }
-  };
-
   const toggleAudio = async () => {
     if (!audioRef.current) {
       return;
@@ -81,18 +63,6 @@ export default function SiteHeader({ navItems }) {
   return (
     <>
       <audio ref={audioRef} loop preload="none" src="/bg-music.mp3" />
-
-      {showIntro && (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black">
-          <h1 className="mb-6 text-center text-4xl font-bold tracking-tight text-zinc-100 md:text-6xl">
-            Gautam Manchandani
-          </h1>
-          <button type="button" onClick={handleEnterSite} className="btn-primary px-8 py-3 text-base tracking-[0.2em]">
-            ENTER PORTFOLIO
-          </button>
-          <p className="mt-4 text-sm text-zinc-500">Click to enter</p>
-        </div>
-      )}
 
       <header
         className={`sticky top-0 z-50 border-b transition-all duration-300 ${
