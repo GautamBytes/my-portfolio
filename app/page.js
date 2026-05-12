@@ -55,7 +55,7 @@ export default function Home() {
               <h1 className="mb-5 text-4xl font-bold tracking-tight text-zinc-100 md:text-5xl">About Me</h1>
               <p className="font-typewriter text-sm leading-relaxed text-amber-200 md:text-base">
                 Upcoming SWE Intern @Better-Auth (YC X25) | Former PLDG Fellow C-6 | Intern @Shopstr | Bitshala Dev Fellow | SOB&apos;25 | Former PM intern @BuildFastwithAI |
-                2nd@(ICCRIP 2024) | 3rd@(IITD Tryst) | CS@BITS PILANI
+                CS@BITS PILANI
               </p>
               <p className="mt-5 text-base leading-relaxed text-zinc-300 md:text-lg">
                 Hi, I&apos;m Gautam Manchandani, a third-year Computer Science student at BITS Pilani. I&apos;m a developer with
