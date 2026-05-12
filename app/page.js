@@ -54,13 +54,13 @@ export default function Home() {
               <p className="mb-3 text-sm uppercase tracking-[0.22em] text-amber-300">Open Source and Product Engineering</p>
               <h1 className="mb-5 text-4xl font-bold tracking-tight text-zinc-100 md:text-5xl">About Me</h1>
               <p className="font-typewriter text-sm leading-relaxed text-amber-200 md:text-base">
-                PLDG Fellow Cohort-6 | Intern @Shopstr | Bitshala Dev Fellow | SOB&apos;25 | Former PM intern @BuildFastwithAI |
+                SWE Intern @Better-Auth (YC X25) | Former PLDG Fellow C-6 | Intern @Shopstr | Bitshala Dev Fellow | SOB&apos;25 | Former PM intern @BuildFastwithAI |
                 2nd@(ICCRIP 2024) | 3rd@(IITD Tryst) | CS@BITS PILANI
               </p>
               <p className="mt-5 text-base leading-relaxed text-zinc-300 md:text-lg">
                 Hi, I&apos;m Gautam Manchandani, a third-year Computer Science student at BITS Pilani. I&apos;m a developer with
-                a heavy bias for open source. I spend most of my time engineering decentralized systems at Protocol Labs and
-                Shopstr, but I don&apos;t like staying in a box. I&apos;ve worked on AI apps, dabbled in product management, and
+                a heavy bias for open source. I&apos;ve engineered decentralized systems at Protocol Labs, contributed to Bitcoin FOSS at Shopstr and
+                Bitshala, but I don&apos;t like staying in a box. I&apos;ve worked on AI apps, dabbled in product management, and
                 love exploring how different technologies connect.
               </p>
               <p className="mt-3 text-base leading-relaxed text-zinc-300 md:text-lg">

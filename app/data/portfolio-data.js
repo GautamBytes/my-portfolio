@@ -16,6 +16,7 @@ export const education = [
     degree: 'BSc, Computer Science',
     duration: 'Jul 2023 - Jul 2027',
     image: '/Bits.webp',
+    grade: 'CGPA - 8.55 (till 5th sem)',
     current: true,
   },
   {
@@ -95,11 +96,20 @@ export const projects = [
 
 export const experiences = [
   {
+    title: 'Upcoming SWE Intern',
+    company: 'Better-Auth (YC X25)',
+    duration: 'Starting Jun 2026',
+    description:
+      'Better Auth is a framework-agnostic, open-source authentication library for TypeScript.',
+    skills: ['TypeScript', 'Authentication', 'Open Source', 'Next.js'],
+    link: 'https://www.linkedin.com/in/gautam-manchandani/',
+  },
+  {
     title: 'PLDG Fellow (Cohort-6)',
     company: 'Protocol Labs',
-    duration: 'Jan 2026 - Present',
+    duration: 'Jan 2026 - Mar 2026',
     description:
-      'Contributing to the libp2p networking stack and Open Source Observer. Implemented WebSocket transport and resolved critical NAT traversal & interoperability issues in py-libp2p to enhance global peer-to-peer connectivity.',
+      'Contributed to the libp2p networking stack and Open Source Observer. Implemented WebSocket transport and resolved critical NAT traversal & interoperability issues in py-libp2p to enhance global peer-to-peer connectivity.',
     skills: ['Python', 'libp2p', 'Networking', 'Open Source', 'Web3'],
     link: 'https://www.linkedin.com/in/gautam-manchandani/',
   },
