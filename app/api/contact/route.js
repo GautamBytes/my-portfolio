@@ -4,7 +4,9 @@ import nodemailer from 'nodemailer';
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 5;
+const RATE_LIMIT_MAX_KEYS = 5000;
 const MAIL_TIMEOUT_MS = 15000;
+const REQUEST_BODY_LIMIT_BYTES = 32 * 1024;
 
 const globalStore = globalThis;
 const requestStore = globalStore.__contactRateLimitStore || new Map();
@@ -20,8 +22,30 @@ function getClientIp(request) {
   return realIp || 'unknown';
 }
 
+function pruneRateLimitStore(now) {
+  if (requestStore.size < RATE_LIMIT_MAX_KEYS) {
+    return;
+  }
+
+  for (const [ip, entry] of requestStore.entries()) {
+    if (now - entry.startedAt > RATE_LIMIT_WINDOW_MS) {
+      requestStore.delete(ip);
+    }
+  }
+
+  while (requestStore.size >= RATE_LIMIT_MAX_KEYS) {
+    const oldestKey = requestStore.keys().next().value;
+    if (!oldestKey) {
+      break;
+    }
+    requestStore.delete(oldestKey);
+  }
+}
+
 function isRateLimited(ip) {
   const now = Date.now();
+  pruneRateLimitStore(now);
+
   const entry = requestStore.get(ip);
 
   if (!entry) {
@@ -50,6 +74,53 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
+}
+
+function normalizeHeaderValue(value) {
+  return value.replace(/[\r\n]+/g, ' ').trim();
+}
+
+function isPayloadTooLarge(request) {
+  const contentLength = Number(request.headers.get('content-length') || 0);
+  return Number.isFinite(contentLength) && contentLength > REQUEST_BODY_LIMIT_BYTES;
+}
+
+function hasJsonContentType(request) {
+  const contentType = request.headers.get('content-type') || '';
+  return contentType.toLowerCase().includes('application/json');
+}
+
+async function readJsonPayload(request) {
+  if (!request.body) {
+    return { error: 'Invalid input' };
+  }
+
+  const reader = request.body.getReader();
+  const decoder = new TextDecoder();
+  let receivedBytes = 0;
+  let rawBody = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) {
+      break;
+    }
+
+    receivedBytes += value.byteLength;
+    if (receivedBytes > REQUEST_BODY_LIMIT_BYTES) {
+      return { error: 'Payload too large', status: 413 };
+    }
+
+    rawBody += decoder.decode(value, { stream: true });
+  }
+
+  rawBody += decoder.decode();
+
+  try {
+    return { payload: JSON.parse(rawBody) };
+  } catch {
+    return { error: 'Invalid input' };
+  }
 }
 
 function validatePayload(payload) {
@@ -125,17 +196,24 @@ export async function POST(request) {
     return json({ success: false, error: 'Failed to send email' }, 500);
   }
 
+  if (!hasJsonContentType(request)) {
+    return json({ success: false, error: 'Invalid input' }, 415);
+  }
+
+  if (isPayloadTooLarge(request)) {
+    return json({ success: false, error: 'Payload too large' }, 413);
+  }
+
   const ip = getClientIp(request);
   if (isRateLimited(ip)) {
     return json({ success: false, error: 'Too many requests' }, 429);
   }
 
-  let body;
-  try {
-    body = await request.json();
-  } catch {
-    return json({ success: false, error: 'Invalid input' }, 400);
+  const bodyResult = await readJsonPayload(request);
+  if (bodyResult.error) {
+    return json({ success: false, error: bodyResult.error }, bodyResult.status || 400);
   }
+  const body = bodyResult.payload;
 
   const honeypot = typeof body.website === 'string' ? body.website.trim() : '';
   if (honeypot) {
@@ -157,6 +235,7 @@ export async function POST(request) {
   const safeName = escapeHtml(validation.values.name);
   const safeEmail = escapeHtml(validation.values.email);
   const safeMessage = escapeHtml(validation.values.message).replaceAll('\n', '<br />');
+  const subjectName = normalizeHeaderValue(validation.values.name);
 
   const transporter = getTransporter();
 
@@ -164,7 +243,7 @@ export async function POST(request) {
     from: process.env.EMAIL_USER,
     to: process.env.EMAIL_USER,
     replyTo: validation.values.email,
-    subject: `New Portfolio Message from ${validation.values.name}`,
+    subject: `New Portfolio Message from ${subjectName}`,
     text: `Name: ${validation.values.name}\nEmail: ${validation.values.email}\nMessage: ${validation.values.message}`,
     html: `
       <h3>New Contact Form Submission</h3>
@@ -183,4 +262,3 @@ export async function POST(request) {
     return json({ success: false, error: 'Failed to send email' }, 500);
   }
 }
-
