@@ -88,6 +88,7 @@ a {
 .section-shell {
   margin-inline: auto;
   padding-block: clamp(2.8rem, 7vw, 5rem);
+  scroll-margin-top: 6rem;
 }
 
 .section-title {
@@ -134,6 +135,30 @@ a {
   color: var(--text-1);
   border-color: rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
+}
+
+.audio-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: rgba(10, 10, 12, 0.72);
+  color: var(--text-2);
+  padding: 0.5rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.audio-control:hover {
+  color: var(--text-1);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.audio-control--active {
+  border-color: rgba(250, 204, 21, 0.72);
+  color: #fde047;
+  box-shadow: 0 0 18px rgba(250, 204, 21, 0.3);
 }
 
 .btn-primary,

@@ -6,7 +6,7 @@ import { Menu, Volume2, VolumeX, X } from 'lucide-react';
 export default function SiteHeader({ navItems }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [wantsAudio, setWantsAudio] = useState(true);
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -41,31 +41,61 @@ export default function SiteHeader({ navItems }) {
     };
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    if (!wantsAudio || !audioRef.current) {
+      return undefined;
+    }
+
+    const audio = audioRef.current;
+    audio.volume = 0.42;
+
+    const playAudio = async () => {
+      try {
+        await audio.play();
+      } catch {
+        // Browsers may block autoplay until the first click or key press.
+      }
+    };
+
+    playAudio();
+
+    window.addEventListener('pointerdown', playAudio, { once: true });
+    window.addEventListener('keydown', playAudio, { once: true });
+    window.addEventListener('touchstart', playAudio, { once: true, passive: true });
+
+    return () => {
+      window.removeEventListener('pointerdown', playAudio);
+      window.removeEventListener('keydown', playAudio);
+      window.removeEventListener('touchstart', playAudio);
+    };
+  }, [wantsAudio]);
+
   const toggleAudio = async () => {
     if (!audioRef.current) {
       return;
     }
 
-    if (isPlaying) {
+    if (wantsAudio) {
       audioRef.current.pause();
-      setIsPlaying(false);
+      setWantsAudio(false);
       return;
     }
 
+    setWantsAudio(true);
+
     try {
       await audioRef.current.play();
-      setIsPlaying(true);
     } catch {
-      setIsPlaying(false);
+      // Browsers may still deny playback if the gesture is not accepted.
     }
   };
 
   return (
     <>
-      <audio ref={audioRef} loop preload="none" src="/bg-music.mp3" />
+      <audio ref={audioRef} autoPlay loop preload="auto" src="/bg-music.mp3" />
 
       <header
-        className={`sticky top-0 z-50 border-b transition-all duration-300 ${
+        className={`site-header fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${
           isScrolled ? 'border-zinc-800/80 bg-black/70 backdrop-blur-md' : 'border-transparent bg-transparent'
         }`}
       >
@@ -81,25 +111,31 @@ export default function SiteHeader({ navItems }) {
                 {item.label}
               </a>
             ))}
-            <button
-              type="button"
-              onClick={toggleAudio}
-              className="rounded-full border border-zinc-700/70 bg-zinc-900/80 p-2 text-zinc-300 transition-colors hover:text-zinc-100"
-              aria-label={isPlaying ? 'Mute background audio' : 'Play background audio'}
-            >
-              {isPlaying ? <Volume2 size={18} /> : <VolumeX size={18} />}
-            </button>
+            <span className="inline-flex">
+              <button
+                type="button"
+                onClick={toggleAudio}
+                className={`audio-control ${wantsAudio ? 'audio-control--active' : ''}`}
+                aria-pressed={wantsAudio}
+                aria-label={wantsAudio ? 'Stop background audio' : 'Play background audio'}
+              >
+                {wantsAudio ? <Volume2 size={18} /> : <VolumeX size={18} />}
+              </button>
+            </span>
           </nav>
 
           <div className="flex items-center gap-3 md:hidden">
-            <button
-              type="button"
-              onClick={toggleAudio}
-              className="rounded-full border border-zinc-700/70 bg-zinc-900/80 p-2 text-zinc-300"
-              aria-label={isPlaying ? 'Mute background audio' : 'Play background audio'}
-            >
-              {isPlaying ? <Volume2 size={20} /> : <VolumeX size={20} />}
-            </button>
+            <span className="inline-flex">
+              <button
+                type="button"
+                onClick={toggleAudio}
+                className={`audio-control ${wantsAudio ? 'audio-control--active' : ''}`}
+                aria-pressed={wantsAudio}
+                aria-label={wantsAudio ? 'Stop background audio' : 'Play background audio'}
+              >
+                {wantsAudio ? <Volume2 size={20} /> : <VolumeX size={20} />}
+              </button>
+            </span>
             <button
               type="button"
               onClick={() => setIsMenuOpen((value) => !value)}

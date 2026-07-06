@@ -30,7 +30,7 @@ export default function Home() {
     <div id="top" className="min-h-screen text-zinc-100">
       <SiteHeader navItems={navItems} />
 
-      <main className="container--wide">
+      <main className="container--wide pt-20">
         <section id="about" className="section-shell min-h-[calc(100vh-6rem)]">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-10 lg:flex-row lg:items-start lg:gap-14">
             <div className="hero-media-column">

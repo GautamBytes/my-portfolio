@@ -1,29 +1,34 @@
 'use client';
 
-import { useMemo } from 'react';
+function createSeededRandom(seed) {
+  let value = seed;
 
-function generateStarField(count) {
+  return () => {
+    value = (value * 1664525 + 1013904223) % 4294967296;
+    return value / 4294967296;
+  };
+}
+
+function generateStarField(count, seed) {
   let stars = '';
+  const random = createSeededRandom(seed);
 
   for (let index = 0; index < count; index += 1) {
-    const x = Math.floor(Math.random() * 2000);
-    const y = Math.floor(Math.random() * 2000);
+    const x = Math.floor(random() * 2000);
+    const y = Math.floor(random() * 2000);
     stars += `${x}px ${y}px #FFF, `;
   }
 
   return stars.slice(0, -2);
 }
 
-export default function StarBackground() {
-  const stars = useMemo(
-    () => ({
-      small: generateStarField(420),
-      medium: generateStarField(140),
-      large: generateStarField(70),
-    }),
-    []
-  );
+const stars = {
+  small: generateStarField(420, 12),
+  medium: generateStarField(140, 128),
+  large: generateStarField(70, 512),
+};
 
+export default function StarBackground() {
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
       <div className="animate-star-move-slow absolute h-[1px] w-[1px] bg-transparent opacity-70" style={{ boxShadow: stars.small }} />
