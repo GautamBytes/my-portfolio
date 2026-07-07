@@ -96,13 +96,18 @@ export const projects = [
 
 export const experiences = [
   {
-    title: 'Upcoming SWE Intern',
-    company: 'Better-Auth (YC X25)',
-    duration: 'Starting Jun 2026',
+    title: 'Contributor',
+    company: 'Better Auth',
+    duration: 'Open Source Contributor',
     description:
-      'Better Auth is a framework-agnostic, open-source authentication library for TypeScript.',
+      'Recognized among the top Better Auth contributors, ranked first after the core team in the contributors list.',
     skills: ['TypeScript', 'Authentication', 'Open Source', 'Next.js'],
-    link: 'https://www.linkedin.com/in/gautam-manchandani/',
+    link: 'https://github.com/better-auth/better-auth',
+    proof: {
+      image: '/better-auth-contributors-proof.png',
+      alt: 'Better Auth contributors list showing Gautam as the first contributor after the core team',
+      caption: 'Contributor proof: ranked first after the Better Auth core team.',
+    },
   },
   {
     title: 'PLDG Fellow (Cohort-6)',

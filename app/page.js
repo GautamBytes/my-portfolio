@@ -54,7 +54,7 @@ export default function Home() {
               <p className="mb-3 text-sm uppercase tracking-[0.22em] text-amber-300">Open Source and Product Engineering</p>
               <h1 className="mb-5 text-4xl font-bold tracking-tight text-zinc-100 md:text-5xl">About Me</h1>
               <p className="font-typewriter text-sm leading-relaxed text-amber-200 md:text-base">
-                Upcoming SWE Intern @Better-Auth (YC X25) | Former PLDG Fellow C-6 | Intern @Shopstr | Bitshala Dev Fellow | SOB&apos;25 | Former PM intern @BuildFastwithAI |
+                Intern @Shopstr | Bitshala Dev Fellow | SOB&apos;25 | Former PLDG Fellow C-6 | Former PM intern @BuildFastwithAI |
                 CS@BITS PILANI
               </p>
               <p className="mt-5 text-base leading-relaxed text-zinc-300 md:text-lg">
@@ -142,6 +142,21 @@ export default function Home() {
                   {experience.duration}
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-zinc-300">{experience.description}</p>
+                {experience.proof && (
+                  <figure className="mt-4 max-w-md overflow-hidden rounded-lg border border-zinc-800/80 bg-zinc-950/60">
+                    <Image
+                      src={experience.proof.image}
+                      alt={experience.proof.alt}
+                      width={684}
+                      height={465}
+                      className="h-auto w-full object-cover"
+                      sizes="(max-width: 768px) 100vw, 448px"
+                    />
+                    <figcaption className="border-t border-zinc-800/80 px-4 py-2 text-xs text-zinc-400">
+                      {experience.proof.caption}
+                    </figcaption>
+                  </figure>
+                )}
                 <div className="mt-4 flex flex-wrap gap-2">
                   {experience.skills.map((skill) => (
                     <span key={skill} className="tag-chip">
