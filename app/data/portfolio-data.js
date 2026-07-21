@@ -2,11 +2,7 @@ export const navItems = [
   { id: 'education', label: 'Education' },
   { id: 'projects', label: 'Projects' },
   { id: 'experience', label: 'Experience' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'achievements', label: 'Achievements' },
   { id: 'github', label: 'GitHub' },
-  { id: 'youtube', label: 'YouTube' },
-  { id: 'gears', label: 'Gears' },
   { id: 'contact', label: 'Contact' },
 ];
 
