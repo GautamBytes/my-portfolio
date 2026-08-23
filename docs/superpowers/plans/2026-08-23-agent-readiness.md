@@ -820,3 +820,62 @@ Record evidence for:
 - [ ] **Step 5: Report the deployment-dependent next step**
 
 State that deploying `codex/agent-readiness` and rerunning the production curl suite are required before claiming the public site is fixed or rescanning the score. Do not push, merge, deploy, or trigger a rescan without user authorization.
+
+---
+
+### Task 6: Show the Shopstr promotion ladder
+
+**Files:**
+- Modify: `tests/unit/agent-content.test.mjs`
+- Modify: `app/data/site-profile.mjs`
+- Modify: `app/data/portfolio-data.js`
+
+**Interfaces:**
+- Consumes: `siteProfile`, `experiences`, and `renderPortfolioMarkdown`.
+- Produces: a current full-time Shopstr engineer role followed by the prior SWE internship in HTML, Markdown, and shared identity content.
+
+- [ ] **Step 1: Write the failing promotion-ladder test**
+
+Import `experiences` from `app/data/portfolio-data.js`, render the real portfolio experience data, and assert:
+
+```js
+assert.match(siteProfile.statusLine, /^Engineer @Shopstr \|/);
+assert.deepEqual(
+  experiences.filter((item) => item.company === 'Shopstr').map(({ title, duration }) => ({ title, duration })),
+  [
+    { title: 'Open Source Bitcoin Engineer', duration: 'Aug 2026 - Present' },
+    { title: 'SWE Intern', duration: 'Sep 2025 - Jul 2026' },
+  ]
+);
+assert.ok(markdown.indexOf('Open Source Bitcoin Engineer, Shopstr') < markdown.indexOf('SWE Intern, Shopstr'));
+assert.match(markdown, /full-time/i);
+```
+
+- [ ] **Step 2: Run the unit test to verify RED**
+
+Run: `node --test tests/unit/agent-content.test.mjs`
+
+Expected: FAIL because the status still says `Intern @Shopstr` and the current experience data contains only the open-ended internship.
+
+- [ ] **Step 3: Implement the approved progression**
+
+Update `siteProfile.statusLine` to begin with `Engineer @Shopstr`. In `experiences`, add `Open Source Bitcoin Engineer`, `Aug 2026 - Present`, with a description that explicitly identifies it as full-time. Immediately after it, retain the previous role as `SWE Intern`, `Sep 2025 - Jul 2026`. Leave the Summer of Bitcoin mentee entry unchanged.
+
+- [ ] **Step 4: Run the focused and full verification suites**
+
+Run:
+
+```bash
+node --test tests/unit/agent-content.test.mjs
+npm run check
+```
+
+Expected: the focused tests and all repository checks pass.
+
+- [ ] **Step 5: Commit and push the existing PR branch**
+
+```bash
+git add app/data/site-profile.mjs app/data/portfolio-data.js tests/unit/agent-content.test.mjs docs/superpowers/plans/2026-08-23-agent-readiness.md
+git commit -m "feat: show Shopstr role progression"
+git push origin codex/agent-readiness
+```
