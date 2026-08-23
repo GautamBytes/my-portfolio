@@ -124,11 +124,20 @@ export const experiences = [
     link: 'https://www.linkedin.com/in/gautam-manchandani/',
   },
   {
-    title: 'Open Source Bitcoin Engineer Intern',
+    title: 'Open Source Bitcoin Engineer',
     company: 'Shopstr',
-    duration: 'Sep 2025 - Present',
+    duration: 'Aug 2026 - Present',
     description:
-      "Continuing contributions to Shopstr's Bitcoin-based payment systems, focusing on enhancing security and user experience through open-source development.",
+      "Promoted from SWE Intern to a full-time engineering role, continuing work on Shopstr's Bitcoin-based payment systems with a focus on security, reliability, and user experience.",
+    skills: ['Next.js', 'TypeScript', 'Nostr', 'Cashu', 'Lightning Network'],
+    link: 'https://www.linkedin.com/in/gautam-manchandani/',
+  },
+  {
+    title: 'SWE Intern',
+    company: 'Shopstr',
+    duration: 'Sep 2025 - Jul 2026',
+    description:
+      "Contributed to Shopstr's Bitcoin-based payment systems, focusing on enhancing security and user experience through open-source development.",
     skills: ['Next.js', 'TypeScript', 'Nostr', 'Cashu', 'Lightning Network'],
     link: 'https://www.linkedin.com/in/gautam-manchandani/',
   },

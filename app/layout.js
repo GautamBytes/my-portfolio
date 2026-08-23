@@ -3,6 +3,7 @@ import { Rubik, Special_Elite } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 
 import StarBackground from './components/StarBackground';
+import { siteProfile } from './data/site-profile.mjs';
 
 const rubik = Rubik({
   subsets: ['latin'],
@@ -18,10 +19,9 @@ const specialElite = Special_Elite({
   display: 'swap',
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-const siteTitle = 'Gautam Manchandani - Portfolio';
-const siteDescription =
-  'Personal portfolio of Gautam Manchandani, showcasing open-source engineering, AI projects, and product-focused development work.';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || siteProfile.canonicalUrl;
+const siteTitle = `${siteProfile.name} - Portfolio`;
+const siteDescription = siteProfile.description;
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
