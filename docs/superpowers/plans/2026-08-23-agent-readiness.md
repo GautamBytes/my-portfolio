@@ -457,12 +457,15 @@ test('canonical homepage negotiates Markdown', async () => {
   assert.match(await response.text(), /^# Gautam Manchandani/m);
 });
 
-test('quality values can prefer HTML and unsupported types receive 406', async () => {
+test('quality values can prefer HTML', async () => {
   const html = await fetch(`${baseUrl}/`, { headers: { Accept: 'text/html;q=1, text/markdown;q=0.5' } });
   assert.match(html.headers.get('content-type') || '', /^text\/html/i);
-  assert.equal(varyIncludes(html, 'Accept'), true);
+});
+
+test('unsupported types receive 406', async () => {
   const unsupported = await fetch(`${baseUrl}/`, { headers: { Accept: 'application/pdf' } });
   assert.equal(unsupported.status, 406);
+  assert.equal(varyIncludes(unsupported, 'Accept'), true);
 });
 
 test('unknown Markdown paths return a useful Markdown 404', async () => {
@@ -581,7 +584,7 @@ export function GET() {
 
 Run: `npm run build && npm run test:http`
 
-Expected: 4 HTTP tests pass, 0 fail. Inspect the HTML response's `Vary` assertion to confirm `Accept` survives alongside Next.js tokens.
+Expected: 5 HTTP tests pass, 0 fail. Confirm the Markdown and 406 responses both include `Vary: Accept`.
 
 - [ ] **Step 6: Commit**
 
