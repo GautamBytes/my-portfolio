@@ -113,6 +113,16 @@ For a request that accepts neither HTML nor Markdown, the proxy returns 406 with
 
 `/llms.txt`, `/sitemap.xml`, `/robots.txt`, API routes, and static assets bypass negotiation and keep their native representations.
 
+## Shopstr Role Progression
+
+Present Shopstr as a promotion ladder without erasing the earlier role:
+
+1. `Open Source Bitcoin Engineer`, `Aug 2026 - Present`, described as a full-time engineering role;
+2. `Open Source Bitcoin Engineer Intern`, `Sep 2025 - Jul 2026`;
+3. the existing `Mentee`, `May 2025 - Aug 2025`, remains unchanged.
+
+Keep the current engineer and prior internship entries adjacent in the experience list so both HTML and negotiated Markdown communicate the progression. Update the compact status line from `Intern @Shopstr` to `Engineer @Shopstr`. The Person JSON-LD continues to use `Open Source Bitcoin Engineer` as the current job title and Shopstr as `worksFor`. This is a content-only change and must not alter the visual design or agent-action safety policy.
+
 ## Error Handling and Caching
 
 - Unknown page paths return 404 for both representations.
@@ -131,6 +141,7 @@ Use Node's built-in test runner for pure negotiation and content functions. Add 
 - homepage Markdown content and safe contact guidance;
 - compliant `llms.txt` ordering and link-list structure;
 - valid Person JSON-LD with required identity fields.
+- the Shopstr current role, prior internship dates, and promotion ordering in rendered Markdown.
 
 Add built-app HTTP verification that starts the production server and checks:
 
