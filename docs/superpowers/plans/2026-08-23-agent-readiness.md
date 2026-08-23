@@ -31,8 +31,8 @@
 - Create `app/not-found.js`: useful HTML 404 UI.
 - Modify `app/page.js`: shared biography, identity-bearing H1, and Person JSON-LD.
 - Modify `app/layout.js`: canonical production metadata URL from shared profile data.
-- Create `tests/agent-content.test.mjs`: machine-readable content unit tests.
-- Create `tests/content-negotiation.test.mjs`: negotiation unit tests.
+- Create `tests/unit/agent-content.test.mjs`: machine-readable content unit tests.
+- Create `tests/unit/content-negotiation.test.mjs`: negotiation unit tests.
 - Create `tests/http-agent-readiness.test.mjs`: built-app endpoint tests.
 - Create `scripts/run-http-tests.mjs`: production-server test harness.
 - Modify `package.json`: unit, HTTP, and complete check scripts.
@@ -44,7 +44,7 @@
 **Files:**
 - Create: `app/data/site-profile.mjs`
 - Create: `app/lib/agent-content.mjs`
-- Create: `tests/agent-content.test.mjs`
+- Create: `tests/unit/agent-content.test.mjs`
 - Modify: `package.json`
 
 **Interfaces:**
@@ -65,7 +65,7 @@ Set these scripts in `package.json`:
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --test tests/*.test.mjs",
+    "test": "node --test tests/unit/*.test.mjs",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "check": "npm test && npm run lint && npm run typecheck && npm run build"
@@ -73,20 +73,20 @@ Set these scripts in `package.json`:
 }
 ```
 
-Create `tests/agent-content.test.mjs`:
+Create `tests/unit/agent-content.test.mjs`:
 
 ```js
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { siteProfile } from '../app/data/site-profile.mjs';
+import { siteProfile } from '../../app/data/site-profile.mjs';
 import {
   buildPersonJsonLd,
   renderLlmsTxt,
   renderNotFoundMarkdown,
   renderPortfolioMarkdown,
   serializeJsonLd,
-} from '../app/lib/agent-content.mjs';
+} from '../../app/lib/agent-content.mjs';
 
 const portfolio = {
   experiences: [{ title: 'Engineer', company: 'Example Org', duration: 'Present', description: 'Builds open-source systems.' }],
@@ -244,7 +244,7 @@ Expected: 4 tests pass, 0 fail.
 - [ ] **Step 6: Commit**
 
 ```bash
-git add package.json app/data/site-profile.mjs app/lib/agent-content.mjs tests/agent-content.test.mjs
+git add package.json app/data/site-profile.mjs app/lib/agent-content.mjs tests/unit/agent-content.test.mjs
 git commit -m "feat: add shared agent content"
 ```
 
@@ -254,7 +254,7 @@ git commit -m "feat: add shared agent content"
 
 **Files:**
 - Create: `app/lib/content-negotiation.mjs`
-- Create: `tests/content-negotiation.test.mjs`
+- Create: `tests/unit/content-negotiation.test.mjs`
 
 **Interfaces:**
 - Produces: `parseAccept(header: string): Array<{ type: string, subtype: string, q: number, position: number }>`
@@ -263,13 +263,13 @@ git commit -m "feat: add shared agent content"
 
 - [ ] **Step 1: Write failing negotiation tests**
 
-Create `tests/content-negotiation.test.mjs`:
+Create `tests/unit/content-negotiation.test.mjs`:
 
 ```js
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { appendVary, preferredType } from '../app/lib/content-negotiation.mjs';
+import { appendVary, preferredType } from '../../app/lib/content-negotiation.mjs';
 
 test('defaults missing and wildcard-only Accept headers to HTML', () => {
   assert.equal(preferredType(null), 'text/html');
@@ -372,7 +372,7 @@ Expected: 8 tests pass, 0 fail.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add app/lib/content-negotiation.mjs tests/content-negotiation.test.mjs
+git add app/lib/content-negotiation.mjs tests/unit/content-negotiation.test.mjs
 git commit -m "feat: parse agent content preferences"
 ```
 

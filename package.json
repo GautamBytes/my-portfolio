@@ -6,9 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "node --test tests/unit/*.test.mjs",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
-    "check": "npm run lint && npm run typecheck && npm run build"
+    "check": "npm test && npm run lint && npm run typecheck && npm run build"
   },
   "dependencies": {
     "@radix-ui/react-tabs": "^1.1.1",
