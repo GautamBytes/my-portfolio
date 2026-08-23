@@ -117,9 +117,15 @@ test('unknown HTML paths return 404 with recovery links', async () => {
   assert.match(html, /href="\/llms\.txt"/);
 });
 
-test('metadata endpoints remain available', async () => {
-  for (const path of ['/sitemap.xml', '/robots.txt']) {
-    const response = await fetch(`${baseUrl}${path}`);
-    assert.equal(response.status, 200, path);
-  }
+test('metadata endpoints use canonical production URLs', async () => {
+  const sitemap = await fetch(`${baseUrl}/sitemap.xml`);
+  assert.equal(sitemap.status, 200);
+  assert.match(await sitemap.text(), /https:\/\/www\.gautambytes\.in/);
+
+  const robots = await fetch(`${baseUrl}/robots.txt`);
+  assert.equal(robots.status, 200);
+  assert.match(
+    await robots.text(),
+    /Sitemap: https:\/\/www\.gautambytes\.in\/sitemap\.xml/
+  );
 });
