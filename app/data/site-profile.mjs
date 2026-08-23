@@ -7,7 +7,7 @@ export const siteProfile = Object.freeze({
     'Open-source and product engineer working across Bitcoin, peer-to-peer networking, Next.js, TypeScript, and applied AI.',
   headline: 'Open Source and Product Engineering',
   statusLine:
-    "Intern @Shopstr | Bitshala Dev Fellow | SOB'25 | Former PLDG Fellow C-6 | Former PM intern @BuildFastwithAI | CS@BITS PILANI",
+    "Engineer @Shopstr | Bitshala Dev Fellow | SOB'25 | Former PLDG Fellow C-6 | Former PM intern @BuildFastwithAI | CS@BITS PILANI",
   biography: [
     "Hi, I'm Gautam Manchandani, a third-year Computer Science student at BITS Pilani. I'm a developer with a heavy bias for open source. I've engineered decentralized systems at Protocol Labs, contributed to Bitcoin FOSS at Shopstr and Bitshala, but I don't like staying in a box. I've worked on AI apps, dabbled in product management, and love exploring how different technologies connect.",
     "Whether I'm optimizing networking protocols or building a practical chatbot, my goal is simple: write good code, contribute to the community, and build things that actually work.",

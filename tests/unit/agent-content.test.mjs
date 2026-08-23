@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import { experiences } from '../../app/data/portfolio-data.js';
 import { siteProfile } from '../../app/data/site-profile.mjs';
 import {
   buildPersonJsonLd,
@@ -41,6 +42,29 @@ test('portfolio Markdown identifies Gautam and requires confirmation for contact
   assert.match(markdown, /explicit user confirmation/i);
   assert.match(markdown, /Example Project/);
   assert.ok(markdown.length > 500);
+});
+
+test('Shopstr experience shows the full-time promotion after the SWE internship', () => {
+  const markdown = renderPortfolioMarkdown({
+    profile: siteProfile,
+    experiences,
+    projects: [],
+    skills: { technical: [], soft: [] },
+  });
+  const shopstrRoles = experiences
+    .filter((item) => item.company === 'Shopstr')
+    .map(({ title, duration }) => ({ title, duration }));
+
+  assert.match(siteProfile.statusLine, /^Engineer @Shopstr \|/);
+  assert.deepEqual(shopstrRoles, [
+    { title: 'Open Source Bitcoin Engineer', duration: 'Aug 2026 - Present' },
+    { title: 'SWE Intern', duration: 'Sep 2025 - Jul 2026' },
+  ]);
+  assert.ok(
+    markdown.indexOf('Open Source Bitcoin Engineer, Shopstr') <
+      markdown.indexOf('SWE Intern, Shopstr')
+  );
+  assert.match(markdown, /full-time/i);
 });
 
 test('llms.txt follows v2 ordering and uses link lists after H2 headings', () => {
