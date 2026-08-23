@@ -9,6 +9,7 @@ import LazyShinchan from './components/home/LazyShinchan';
 import ProjectsSection from './components/home/ProjectsSection';
 import SiteHeader from './components/home/SiteHeader';
 import YouTubeSection from './components/home/YouTubeSection';
+import { siteProfile } from './data/site-profile.mjs';
 import {
   achievements,
   education,
@@ -18,6 +19,10 @@ import {
   projects,
   skills,
 } from './data/portfolio-data';
+import {
+  buildPersonJsonLd,
+  serializeJsonLd,
+} from './lib/agent-content.mjs';
 
 const achievementIconMap = {
   award: Award,
@@ -26,8 +31,14 @@ const achievementIconMap = {
 };
 
 export default function Home() {
+  const personJsonLd = serializeJsonLd(buildPersonJsonLd(siteProfile));
+
   return (
     <div id="top" className="min-h-screen text-zinc-100">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: personJsonLd }}
+      />
       <SiteHeader navItems={navItems} />
 
       <main className="container--wide pt-20">
@@ -51,26 +62,23 @@ export default function Home() {
             </div>
 
             <div className="flex-1 w-full">
-              <p className="mb-3 text-sm uppercase tracking-[0.22em] text-amber-300">Open Source and Product Engineering</p>
-              <h1 className="mb-5 text-4xl font-bold tracking-tight text-zinc-100 md:text-5xl">About Me</h1>
+              <p className="mb-3 text-sm uppercase tracking-[0.22em] text-amber-300">{siteProfile.headline}</p>
+              <h1 className="mb-5 text-4xl font-bold tracking-tight text-zinc-100 md:text-5xl">{siteProfile.name}</h1>
               <p className="font-typewriter text-sm leading-relaxed text-amber-200 md:text-base">
-                Intern @Shopstr | Bitshala Dev Fellow | SOB&apos;25 | Former PLDG Fellow C-6 | Former PM intern @BuildFastwithAI |
-                CS@BITS PILANI
+                {siteProfile.statusLine}
               </p>
-              <p className="mt-5 text-base leading-relaxed text-zinc-300 md:text-lg">
-                Hi, I&apos;m Gautam Manchandani, a third-year Computer Science student at BITS Pilani. I&apos;m a developer with
-                a heavy bias for open source. I&apos;ve engineered decentralized systems at Protocol Labs, contributed to Bitcoin FOSS at Shopstr and
-                Bitshala, but I don&apos;t like staying in a box. I&apos;ve worked on AI apps, dabbled in product management, and
-                love exploring how different technologies connect.
-              </p>
-              <p className="mt-3 text-base leading-relaxed text-zinc-300 md:text-lg">
-                Whether I&apos;m optimizing networking protocols or building a practical chatbot, my goal is simple: write good
-                code, contribute to the community, and build things that actually work.
-              </p>
+              {siteProfile.biography.map((paragraph, index) => (
+                <p
+                  key={paragraph}
+                  className={`${index === 0 ? 'mt-5' : 'mt-3'} text-base leading-relaxed text-zinc-300 md:text-lg`}
+                >
+                  {paragraph}
+                </p>
+              ))}
 
               <div className="mt-7 flex flex-wrap gap-3">
                 <a
-                  href="https://drive.google.com/file/d/1IC4NRo2S5wNTRNMu0VmchpKQzhc2vg25/view?usp=sharing"
+                  href={siteProfile.resumeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary inline-flex items-center gap-2 px-5 py-3"
@@ -79,7 +87,7 @@ export default function Home() {
                   View Resume
                 </a>
                 <a
-                  href="https://cal.com/gautam-manchandani"
+                  href={siteProfile.calendarUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-secondary inline-flex items-center gap-2 px-5 py-3"

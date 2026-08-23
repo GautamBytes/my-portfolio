@@ -586,6 +586,8 @@ Run: `npm run build && npm run test:http`
 
 Expected: 5 HTTP tests pass, 0 fail. Confirm the Markdown and 406 responses both include `Vary: Accept`.
 
+Execution note: Next.js 16 currently overwrites custom `Vary` values on rendered App Router HTML responses ([vercel/next.js#85852](https://github.com/vercel/next.js/issues/85852)). The audit requirement is enforced on the Markdown and 406 responses produced directly by Proxy or the Markdown route handler.
+
 - [ ] **Step 6: Commit**
 
 ```bash
@@ -744,7 +746,7 @@ export default function NotFound() {
 
 Run: `npm run check`
 
-Expected: all unit tests and 7 HTTP tests pass; lint, typecheck, and build exit 0.
+Expected: all 8 unit tests and 9 HTTP tests pass; lint, typecheck, and build exit 0.
 
 - [ ] **Step 7: Commit**
 

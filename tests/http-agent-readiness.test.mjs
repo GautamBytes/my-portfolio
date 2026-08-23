@@ -9,6 +9,17 @@ function varyIncludes(response, token) {
     .some((value) => value.trim().toLowerCase() === token.toLowerCase());
 }
 
+function visibleText(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&apos;|&#x27;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 test('canonical homepage negotiates Markdown', async () => {
   const response = await fetch(`${baseUrl}/`, {
     headers: { Accept: 'text/markdown' },
@@ -62,4 +73,53 @@ test('llms.txt is available as UTF-8 plain text', async () => {
     /^text\/plain;\s*charset=utf-8/i
   );
   assert.match(await response.text(), /\*\*When to use this site:\*\*/);
+});
+
+test('raw homepage HTML identifies Gautam with structured readable content', async () => {
+  const response = await fetch(`${baseUrl}/`, {
+    headers: { Accept: 'text/html' },
+  });
+
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  const h1 = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+  assert.ok(h1);
+  assert.match(visibleText(h1[1]), /Gautam Manchandani/);
+  assert.ok(visibleText(html).length > 500);
+  assert.match(html, /<h2[\s>]/i);
+  assert.match(html, /<h3[\s>]/i);
+});
+
+test('raw homepage HTML includes Person JSON-LD', async () => {
+  const response = await fetch(`${baseUrl}/`, {
+    headers: { Accept: 'text/html' },
+  });
+  const html = await response.text();
+  const jsonLd = html.match(
+    /<script[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/i
+  );
+
+  assert.ok(jsonLd);
+  const person = JSON.parse(jsonLd[1]);
+  assert.equal(person['@type'], 'Person');
+  assert.equal(person.url, 'https://www.gautambytes.in');
+});
+
+test('unknown HTML paths return 404 with recovery links', async () => {
+  const response = await fetch(`${baseUrl}/missing-browser-path`, {
+    headers: { Accept: 'text/html' },
+  });
+
+  assert.equal(response.status, 404);
+  const html = await response.text();
+  assert.match(html, /Page not found/i);
+  assert.match(html, /href="\/sitemap\.xml"/);
+  assert.match(html, /href="\/llms\.txt"/);
+});
+
+test('metadata endpoints remain available', async () => {
+  for (const path of ['/sitemap.xml', '/robots.txt']) {
+    const response = await fetch(`${baseUrl}${path}`);
+    assert.equal(response.status, 200, path);
+  }
 });
